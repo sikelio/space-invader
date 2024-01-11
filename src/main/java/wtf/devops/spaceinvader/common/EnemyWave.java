@@ -1,20 +1,20 @@
-package wtf.devops.spaceinvader.common
+package wtf.devops.spaceinvader.common;
 
-public class EnemyWave(){
+public class EnemyWave{
     private Enemy[] enemywave;
     private int speed;
 
-    public void EnemyWave(Enemy[] Enemy, speed){
-        this.enemies = enemywave
+    public void EnemyWave(Enemy[] enemy, int speed){
+        this.enemywave = enemywave;
         this.speed = speed;
     }
 
     private Enemy[] generate(Enemy[] enemies){
-
+    	return this.enemywave;
     }
 
     private Enemy[] removeEnemy(Enemy enemy){
-
+    	return this.enemywave;
     }
 
     private Enemy[] getEnemyWave(){

@@ -1,4 +1,4 @@
-package wtf.devops.spaceinvader
+package wtf.devops.spaceinvader.common;
 
 public enum EnemyType{
     octopus,

@@ -7,7 +7,6 @@ public class Enemy() {
     private EnemyType enemyType;
     private float x;
     private float y;
-    private
 
 
     public void Enemy(float x, float y){

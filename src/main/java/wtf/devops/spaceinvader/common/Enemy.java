@@ -1,13 +1,14 @@
-package wtf.devops.spaceinvader.common
+package wtf.devops.spaceinvader.common;
 
-    public class Enemy() {
-    private string lifepoint;
+public class Enemy {
+    private String  lifepoint;
+    
     private EnemyType enemyType;
     private float x;
     private float y;
 
 
-    public void Enemy(float x, float y){
+    public Enemy(float x, float y){
         this.x = x;
         this.y = y;
     }
@@ -20,7 +21,7 @@ package wtf.devops.spaceinvader.common
 
     }
 
-    public string getLifepoint(){
+    public String getLifepoint(){
         return this.lifepoint;
     }
 
@@ -33,10 +34,10 @@ package wtf.devops.spaceinvader.common
     }
 
     public void setX(float x){
-        return this.x = x;
+        this.x = x;
     }
 
     public void setY(float y){
-        return this.y = y;
+        this.y = y;
     }
 }

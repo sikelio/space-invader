@@ -30,12 +30,7 @@ public class MainGui extends GameApplication {
     @Override
     protected void initGame() {
     	getGameWorld().addEntityFactory(new SpaceInvaderEntityFactory());
-    	this.player = spawn("player");
-       /* this.player = FXGL
-                .entityBuilder()
-                .at(287.5, 550)
-                .view(new Rectangle(25, 25, Color.BLUE))
-                .buildAndAttach(); */
+        this.player = getGameWorld().spawn("player");
     }
 
     @Override

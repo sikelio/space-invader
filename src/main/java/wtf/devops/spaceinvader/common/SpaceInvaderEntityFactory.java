@@ -22,17 +22,17 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 	
 	@Spawns("bullet")
 	public Entity bullet(SpawnData data) {
-		return FXGL.entityBuilder(data)
-			    .at(287.5, 550)
-			    .view(new Rectangle(10, 10, Color.WHITE))
-                .buildAndAttach();
+			return FXGL.entityBuilder(data)
+					.at(287.5, 550)
+			    	.view(new Rectangle(10, 10, Color.WHITE))
+                	.buildAndAttach();
 	}
 	
 	@Spawns("enemy")
 	public Entity enemy(SpawnData data) {
 		return FXGL.entityBuilder(data)
-				.at(500,500)
-				.view(new Rectangle(75, 75, Color.GREEN))
-				.buildAndAttach();
+					.at(500,500)
+					.view(new Rectangle(75, 75, Color.GREEN))
+					.buildAndAttach();
 	}
 }

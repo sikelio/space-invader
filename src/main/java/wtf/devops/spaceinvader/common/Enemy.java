@@ -1,8 +1,6 @@
 package wtf.devops.spaceinvader.common
 
-import wtf.devops.spaceinvader.common.EnemyType
-
-public class Enemy() {
+    public class Enemy() {
     private string lifepoint;
     private EnemyType enemyType;
     private float x;

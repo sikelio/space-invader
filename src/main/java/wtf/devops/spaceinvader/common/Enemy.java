@@ -1,6 +1,11 @@
 package wtf.devops.spaceinvader.common;
 
-public class Enemy {
+import com.almasb.fxgl.app.GameApplication;
+import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
+
+public class Enemy extends GameApplication {
     private String  lifepoint;
     
     private EnemyType enemyType;
@@ -40,4 +45,10 @@ public class Enemy {
     public void setY(float y){
         this.y = y;
     }
+
+	@Override
+	protected void initSettings(GameSettings settings) {
+		// TODO Auto-generated method stub
+		
+	}
 }

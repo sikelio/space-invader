@@ -5,9 +5,10 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import wtf.devops.spaceinvader.common.*;
+
+import static com.almasb.fxgl.dsl.FXGL.*;
 
 import java.util.Map;
 
@@ -28,11 +29,8 @@ public class MainGui extends GameApplication {
 
     @Override
     protected void initGame() {
-        this.player = FXGL
-                .entityBuilder()
-                .at(287.5, 550)
-                .view(new Rectangle(25, 25, Color.BLUE))
-                .buildAndAttach();
+    	getGameWorld().addEntityFactory(new SpaceInvaderEntityFactory());
+        this.player = getGameWorld().spawn("player");
     }
 
     @Override

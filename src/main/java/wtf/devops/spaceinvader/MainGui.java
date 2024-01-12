@@ -38,6 +38,7 @@ public class MainGui extends GameApplication {
     protected void initInput() {
         onKey(KeyCode.LEFT, () -> this.player.getComponent(PlayerComponent.class).left());
         onKey(KeyCode.RIGHT, () -> this.player.getComponent(PlayerComponent.class).right());
+        onKey(KeyCode.SPACE, () -> this.player.getComponent(PlayerComponent.class).shoot());
     }
 
     @Override

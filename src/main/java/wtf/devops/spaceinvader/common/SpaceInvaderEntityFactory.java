@@ -55,8 +55,21 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 	@Spawns("enemy")
 	public Entity enemy(SpawnData data) {
 		return FXGL.entityBuilder(data)
+					.type(ENEMY)
 					.at(500,500)
 					.view(new Rectangle(75, 75, Color.GREEN))
 					.buildAndAttach();
+	}
+	
+	@Spawns("shield")
+	public Entity shield(SpawnData data) {
+		Texture texture = texture("shield/fullShield.png");
+		
+		return FXGL.entityBuilder(data)
+					.type(SHIELD)
+					.at(data.<Integer>get("x"), 150)
+					.scale(4, 4)
+					.viewWithBBox(texture)
+					.build();
 	}
 }

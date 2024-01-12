@@ -4,14 +4,18 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 import wtf.devops.spaceinvader.common.*;
 import wtf.devops.spaceinvader.components.*;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
 import java.util.Map;
+import java.util.Stack;
 
 public class MainGui extends GameApplication {
     public static void main(String[] args) {
@@ -27,11 +31,19 @@ public class MainGui extends GameApplication {
     }
 
     private Entity player;
+    private Stack<Entity> shield;
 
     @Override
     protected void initGame() {
     	getGameWorld().addEntityFactory(new SpaceInvaderEntityFactory());
         this.player = getGameWorld().spawn("player");
+        
+        
+        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 50)));
+        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 150)));
+        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 250)));
+        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 350)));
+        
     }
 
     @Override

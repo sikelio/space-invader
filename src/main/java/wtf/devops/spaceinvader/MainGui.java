@@ -38,11 +38,11 @@ public class MainGui extends GameApplication {
     	getGameWorld().addEntityFactory(new SpaceInvaderEntityFactory());
         this.player = getGameWorld().spawn("player");
         
-        
+        this.shield = new Stack<Entity>();
         this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 50)));
-        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 150)));
-        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 250)));
-        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 350)));
+        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 200)));
+        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 375)));
+        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 525)));
         
     }
 

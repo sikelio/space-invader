@@ -7,6 +7,7 @@ import com.almasb.fxgl.entity.Entity;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 import wtf.devops.spaceinvader.common.*;
+import wtf.devops.spaceinvader.components.*;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -35,21 +36,8 @@ public class MainGui extends GameApplication {
 
     @Override
     protected void initInput() {
-        FXGL.onKey(KeyCode.RIGHT, () -> {
-            if (this.player.getX() > 575) {
-                return;
-            }
-
-            this.player.translateX(5);
-        });
-
-        FXGL.onKey(KeyCode.LEFT, () -> {
-            if (this.player.getX() < 0) {
-                return;
-            }
-
-            this.player.translateX(-5);
-        });
+        onKey(KeyCode.LEFT, () -> this.player.getComponent(PlayerComponent.class).left());
+        onKey(KeyCode.RIGHT, () -> this.player.getComponent(PlayerComponent.class).right());
     }
 
     @Override

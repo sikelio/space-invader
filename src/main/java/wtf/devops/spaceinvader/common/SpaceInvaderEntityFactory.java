@@ -10,6 +10,7 @@ import com.almasb.fxgl.entity.Spawns;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import wtf.devops.spaceinvader.components.PlayerComponent;
 
 public class SpaceInvaderEntityFactory implements EntityFactory {
 	@Spawns("player")
@@ -17,6 +18,7 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 		return FXGL.entityBuilder(data)
 				    .at(287.5, 550)
 				    .view(new Rectangle(25, 25, Color.BLUE))
+					.with(new PlayerComponent())
 	                .buildAndAttach();
 	}
 	

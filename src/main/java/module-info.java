@@ -7,4 +7,5 @@ module wtf.devops.spaceinvader {
     opens wtf.devops.spaceinvader to javafx.fxml;
     exports wtf.devops.spaceinvader;
     exports wtf.devops.spaceinvader.common;
+    exports wtf.devops.spaceinvader.components;
 }

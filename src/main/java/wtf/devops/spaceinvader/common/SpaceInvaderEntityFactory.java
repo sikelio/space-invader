@@ -12,6 +12,8 @@ import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.texture.Texture;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import wtf.devops.spaceinvader.components.BulletComponent;
@@ -54,9 +56,16 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 	
 	@Spawns("enemy")
 	public Entity enemy(SpawnData data) {
+		//EnemyType enemyType = data.get("enemyType");
+		int positionX = data.get("X");
+		int positionY = data.get("Y");
+		Texture texture = texture("aliens/mediumAlien.png");
+		texture.outline(Color.BLACK);
+
 		return FXGL.entityBuilder(data)
-					.at(500,500)
-					.view(new Rectangle(75, 75, Color.GREEN))
+					.at(positionX,getAppHeight() - (double) positionY - 40)
+					.viewWithBBox(texture)
+				    .scale(4,4)
 					.buildAndAttach();
 	}
 }

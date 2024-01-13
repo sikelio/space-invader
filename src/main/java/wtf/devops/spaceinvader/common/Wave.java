@@ -2,13 +2,12 @@ package wtf.devops.spaceinvader.common;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.entity.component.Component;
 import javafx.util.Duration;
 
 import java.util.HashSet;
-import java.util.Stack;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -34,10 +33,33 @@ public class Wave {
     }
 
     public void moveEnemies(HashSet<Entity> enemies){
-        FXGL.getGameTimer().runAtInterval(() ->  {
-            for(Entity enemie : enemies){
-                enemie.translateX(5);
+        // Calculer max itération
+        AtomicInteger iterationCount = new AtomicInteger(0);
+        AtomicBoolean entityIsAtRightSide = new AtomicBoolean(false);
+
+        int totalIterations = 25;
+
+        var timer = FXGL.getGameTimer();
+        timer.runAtInterval(() -> {
+            if(iterationCount.get() < 2){
+                enemies.forEach(enemie -> enemie.translateX(5));
+            }else{
+                if((iterationCount.get() - 2) % 6 == 0){
+                    enemies.forEach(enemie -> enemie.translateY(5));
+                    entityIsAtRightSide.set(!entityIsAtRightSide.get());
+                }else{
+                    if(entityIsAtRightSide.get()){
+                        enemies.forEach(enemie -> enemie.translateX(-5));
+                    }else{
+                        enemies.forEach(enemie -> enemie.translateX(5));
+                    }
+                }
             }
-        }, Duration.seconds(1));
+
+            if(iterationCount.incrementAndGet() >= totalIterations){
+                timer.clear();
+            }
+        }, Duration.seconds(0.5));
     }
+
 }

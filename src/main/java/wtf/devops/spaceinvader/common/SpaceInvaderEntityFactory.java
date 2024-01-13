@@ -66,6 +66,6 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 					.at(positionX,getAppHeight() - (double) positionY - 40)
 					.viewWithBBox(texture)
 				    .scale(4,4)
-					.buildAndAttach();
+					.build();
 	}
 }

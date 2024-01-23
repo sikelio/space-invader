@@ -24,6 +24,8 @@ public class MainGui extends GameApplication {
         gameSettings.setHeight(600);
         gameSettings.setTitle("Space Invader");
         gameSettings.setVersion("1.0.0");
+        gameSettings.setMainMenuEnabled(true);
+        gameSettings.setSceneFactory(new SpaceInvaderSceneFactory());
     }
 
     private Entity player;

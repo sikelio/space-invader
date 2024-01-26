@@ -14,10 +14,7 @@ import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.texture.Texture;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import wtf.devops.spaceinvader.components.BulletComponent;
-import wtf.devops.spaceinvader.components.EnemyComponent;
-import wtf.devops.spaceinvader.components.OwnerComponent;
-import wtf.devops.spaceinvader.components.PlayerComponent;
+import wtf.devops.spaceinvader.components.*;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static wtf.devops.spaceinvader.common.EntityType.*;
@@ -52,6 +49,21 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.with(new CollidableComponent(true))
 				.with(new OffscreenCleanComponent())
 				.with(new BulletComponent(850))
+				.build();
+	}
+
+	@Spawns("enemy_bullet")
+	public Entity enemyBullet(SpawnData data) {
+		Entity owner = data.get("owner");
+
+		return  FXGL.entityBuilder(data)
+				.type(BULLET)
+				.at(owner.getCenter().add(-3, 20))
+				.view(new Rectangle(10, 10, Color.BROWN))
+				.with(new OwnerComponent(owner.getType()))
+				.with(new CollidableComponent(true))
+				.with(new OffscreenCleanComponent())
+				.with(new EnemyBulletComponent(850))
 				.build();
 	}
 	

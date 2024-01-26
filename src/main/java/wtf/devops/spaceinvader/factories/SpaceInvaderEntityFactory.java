@@ -57,8 +57,9 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 		Entity owner = data.get("owner");
 
 		return  FXGL.entityBuilder(data)
-				.type(BULLET)
+				.type(ENEMY_BULLET)
 				.at(owner.getCenter().add(-3, 20))
+				.bbox(new HitBox(BoundingShape.box(9, 20)))
 				.view(new Rectangle(10, 10, Color.BROWN))
 				.with(new OwnerComponent(owner.getType()))
 				.with(new CollidableComponent(true))
@@ -76,13 +77,13 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 		texture.outline(Color.BLACK);
 
 		return FXGL.entityBuilder(data)
-					.at(positionX,getAppHeight() - (double) positionY - 40)
-					.type(ENEMY)
-					.viewWithBBox(texture)
-				    .scale(4,4)
-					.with(new CollidableComponent(true))
-					.with(new EnemyComponent())
-					.build();
+				.at(positionX,getAppHeight() - (double) positionY - 40)
+				.type(ENEMY)
+				.viewWithBBox(texture)
+				.scale(4,4)
+				.with(new CollidableComponent(true))
+				.with(new EnemyComponent())
+				.build();
 	}
 	
 	@Spawns("shield")
@@ -90,10 +91,12 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 		Texture texture = texture("shield/fullShield.png");
 		
 		return FXGL.entityBuilder(data)
-					.type(SHIELD)
-					.at(data.<Integer>get("x"), getAppHeight() - 175)
-					.scale(3, 3)
-					.viewWithBBox(texture)
-					.build();
+				.type(SHIELD)
+				.at(data.<Integer>get("x"), getAppHeight() - 175)
+				.scale(3, 3)
+				.viewWithBBox(texture)
+				.with(new CollidableComponent(true))
+				.with(new ShieldComponent())
+				.build();
 	}
 }

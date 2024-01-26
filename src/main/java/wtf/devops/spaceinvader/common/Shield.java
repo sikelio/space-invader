@@ -5,7 +5,7 @@ public class Shield {
 
     private ShieldState state;
 
-    public Shield(int lifepoint) {
+    public Shield (int lifepoint) {
         this.lifepoint = lifepoint;
         this.state = ShieldState.New;
     }

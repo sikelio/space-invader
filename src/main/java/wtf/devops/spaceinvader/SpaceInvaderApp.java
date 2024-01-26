@@ -3,10 +3,15 @@ package wtf.devops.spaceinvader;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.handlers.CollectibleHandler;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.physics.CollisionHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
+import wtf.devops.spaceinvader.collision.BulletOnEnemy;
+import wtf.devops.spaceinvader.collision.BulletOnShield;
+import wtf.devops.spaceinvader.collision.EnemyBulletOnShield;
 import wtf.devops.spaceinvader.common.*;
 import wtf.devops.spaceinvader.components.*;
 import wtf.devops.spaceinvader.common.Wave;
@@ -75,20 +80,9 @@ public class SpaceInvaderApp extends GameApplication {
 
     @Override
     protected void initPhysics() {
-        FXGL.onCollisionBegin(EntityType.BULLET, EntityType.ENEMY, (bullet, enemy) -> {
-            Object owner = bullet.getComponent(OwnerComponent.class).getValue();
-
-            if (owner == EntityType.ENEMY) {
-                return;
-            }
-
-            enemies.remove(enemy);
-
-            FXGL.inc("score", +10);
-
-            FXGL.getGameWorld().removeEntity(bullet);
-            FXGL.getGameWorld().removeEntity(enemy);
-        });
+        getPhysicsWorld().addCollisionHandler(new BulletOnEnemy(this.enemies));
+        getPhysicsWorld().addCollisionHandler(new BulletOnShield());
+        getPhysicsWorld().addCollisionHandler(new EnemyBulletOnShield());
     }
 
     @Override

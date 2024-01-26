@@ -1,5 +1,6 @@
 package wtf.devops.spaceinvader.components;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 
 public class BulletComponent extends Component {
@@ -12,5 +13,9 @@ public class BulletComponent extends Component {
     @Override
     public void onUpdate(double tpf) {
         entity.translateY(-tpf * this.speed);
+
+        if (entity.getY() + entity.getHeight() < 0) {
+            FXGL.getGameWorld().removeEntity(entity);
+        }
     }
 }

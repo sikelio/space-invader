@@ -31,7 +31,7 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.type(PLAYER)
 				.viewWithBBox(texture)
 				.with(new CollidableComponent(true))
-				.with(new PlayerComponent())
+				.with(new PlayerComponent(10))
 				.with("dead", true)
 				.buildAndAttach();
 	}

@@ -17,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import wtf.devops.spaceinvader.collision.BulletOnEnemy;
 import wtf.devops.spaceinvader.collision.BulletOnShield;
+import wtf.devops.spaceinvader.collision.EnemyBulletOnPlayer;
 import wtf.devops.spaceinvader.collision.EnemyBulletOnShield;
 import wtf.devops.spaceinvader.common.*;
 import wtf.devops.spaceinvader.components.*;
@@ -97,6 +98,7 @@ public class SpaceInvaderApp extends GameApplication {
         getPhysicsWorld().addCollisionHandler(new BulletOnEnemy(this.enemies));
         getPhysicsWorld().addCollisionHandler(new BulletOnShield());
         getPhysicsWorld().addCollisionHandler(new EnemyBulletOnShield());
+        getPhysicsWorld().addCollisionHandler(new EnemyBulletOnPlayer());
     }
 
     @Override

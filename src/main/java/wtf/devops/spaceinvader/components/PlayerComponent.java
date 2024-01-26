@@ -14,6 +14,11 @@ public class PlayerComponent extends Component {
     private final double speed = 1;
     private boolean canShoot = true;
     private double lastTimeShoot = 0;
+    private int lifepoint;
+
+    public PlayerComponent(int lifepoint) {
+        this.lifepoint = lifepoint;
+    }
 
     @Override
     public void onUpdate(double tpf) {
@@ -45,5 +50,13 @@ public class PlayerComponent extends Component {
         this.lastTimeShoot = getGameTimer().getNow();
 
         spawn("bullet", new SpawnData(0, 0).put("owner", getEntity()));
+    }
+
+    public int getLifepoint() {
+        return lifepoint;
+    }
+
+    public void setLifepoint(int lifepoint) {
+        this.lifepoint = lifepoint;
     }
 }

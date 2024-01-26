@@ -8,6 +8,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.physics.CollisionHandler;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import wtf.devops.spaceinvader.collision.BulletOnEnemy;
 import wtf.devops.spaceinvader.collision.BulletOnShield;
@@ -71,9 +72,14 @@ public class SpaceInvaderApp extends GameApplication {
     @Override
     protected void initUI() {
         Text score = new Text();
-        score.setTranslateX(50);
-        score.setTranslateY(50);
+        score.setTranslateX(25);
+        score.setTranslateY(575);
         score.textProperty().bind(FXGL.getWorldProperties().intProperty("score").asString());
+        score.setFill(Color.rgb(255, 231, 68));
+        score.setStyle(
+                "-fx-font-size: 24px;" +
+                "-fx-font-family: Impact;"
+        );
 
         FXGL.getGameScene().addUINode(score);
     }

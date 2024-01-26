@@ -12,6 +12,7 @@ import wtf.devops.spaceinvader.components.*;
 import wtf.devops.spaceinvader.common.Wave;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -28,10 +29,13 @@ public class MainGui extends GameApplication {
         gameSettings.setHeight(600);
         gameSettings.setTitle("Space Invader");
         gameSettings.setVersion("1.0.0");
+        gameSettings.setMainMenuEnabled(true);
+        gameSettings.setSceneFactory(new SpaceInvaderSceneFactory());
     }
 
     private Entity player;
     private HashSet<Entity> enemies;
+    private Stack<Entity> shield;
 
     @Override
     protected void initGame() {
@@ -41,6 +45,13 @@ public class MainGui extends GameApplication {
         Wave enemiesWave = new Wave();
         this.enemies = enemiesWave.generateWave();
         enemiesWave.moveEnemies(this.enemies);
+        
+        this.shield = new Stack<Entity>();
+        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 50)));
+        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 200)));
+        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 375)));
+        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 525)));
+        
     }
 
     @Override

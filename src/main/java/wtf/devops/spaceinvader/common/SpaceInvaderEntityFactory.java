@@ -68,4 +68,16 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				    .scale(4,4)
 					.build();
 	}
+	
+	@Spawns("shield")
+	public Entity shield(SpawnData data) {
+		Texture texture = texture("shield/fullShield.png");
+		
+		return FXGL.entityBuilder(data)
+					.type(SHIELD)
+					.at(data.<Integer>get("x"), getAppHeight() - 175)
+					.scale(3, 3)
+					.viewWithBBox(texture)
+					.build();
+	}
 }

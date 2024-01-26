@@ -45,13 +45,24 @@ public class Wave {
             boolean atLeftEdge = enemies.stream().anyMatch(enemy -> enemy.getX() <= 2.5);
 
             if (atRightEdge || atLeftEdge) {
-                // Descendre et changer de direction quand un bord est atteint
                 enemies.forEach(enemy -> enemy.translateY(5));
                 entityIsAtRightSide.set(!entityIsAtRightSide.get());
             }
 
             int dx = entityIsAtRightSide.get() ? -5 : 5;
             enemies.forEach(enemy -> enemy.translateX(dx));
+
+            boolean atBottom = enemies.stream().anyMatch(enemy -> enemy.getY() >= FXGL.getAppHeight() - enemy.getHeight());
+            if (atBottom) {
+                timer.clear();
+                this.onGameEnd();
+            }
         }, Duration.seconds(0.25));
+    }
+
+    private void onGameEnd() {
+        FXGL.getDialogService().showMessageBox("Game Over!", () -> {
+            FXGL.getGameController().gotoMainMenu();
+        });
     }
 }

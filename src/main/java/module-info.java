@@ -3,6 +3,7 @@ open module wtf.devops.spaceinvader {
     requires javafx.fxml;
 
     requires com.almasb.fxgl.all;
+    requires annotations;
 
     exports wtf.devops.spaceinvader;
     exports wtf.devops.spaceinvader.common;

@@ -3,6 +3,7 @@ package wtf.devops.spaceinvader.common;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.time.Timer;
 import javafx.util.Duration;
 
 import java.util.HashSet;
@@ -20,46 +21,37 @@ public class Wave {
     public HashSet<Entity> generateWave(){
         double delay = 0.3;
 
-        for(int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             for (int e = 0; e < 12; e++) {
-
-                    this.enemies.add(getGameWorld().
-                            spawn("enemy",
-                                    new SpawnData(0,0).put("X", this.xCord[e]).put("Y", this.yCord[i])));
+                this.enemies.add(getGameWorld().
+                    spawn(
+                        "enemy",
+                        new SpawnData(0,0).put("X", this.xCord[e]).put("Y", this.yCord[i])
+                    )
+                );
 
             }
         }
+
         return this.enemies;
     }
 
-    public void moveEnemies(HashSet<Entity> enemies){
-        // Calculer max itération
-        AtomicInteger iterationCount = new AtomicInteger(0);
+    public void moveEnemies(HashSet<Entity> enemies) {
         AtomicBoolean entityIsAtRightSide = new AtomicBoolean(false);
 
-        int totalIterations = 25;
-
-        var timer = FXGL.getGameTimer();
+        Timer timer = FXGL.getGameTimer();
         timer.runAtInterval(() -> {
-            if(iterationCount.get() < 2){
-                enemies.forEach(enemie -> enemie.translateX(5));
-            }else{
-                if((iterationCount.get() - 2) % 6 == 0){
-                    enemies.forEach(enemie -> enemie.translateY(5));
-                    entityIsAtRightSide.set(!entityIsAtRightSide.get());
-                }else{
-                    if(entityIsAtRightSide.get()){
-                        enemies.forEach(enemie -> enemie.translateX(-5));
-                    }else{
-                        enemies.forEach(enemie -> enemie.translateX(5));
-                    }
-                }
+            boolean atRightEdge = enemies.stream().anyMatch(enemy -> enemy.getRightX() >= FXGL.getAppWidth() - 2.5);
+            boolean atLeftEdge = enemies.stream().anyMatch(enemy -> enemy.getX() <= 2.5);
+
+            if (atRightEdge || atLeftEdge) {
+                // Descendre et changer de direction quand un bord est atteint
+                enemies.forEach(enemy -> enemy.translateY(5));
+                entityIsAtRightSide.set(!entityIsAtRightSide.get());
             }
 
-            if(iterationCount.incrementAndGet() >= totalIterations){
-                timer.clear();
-            }
-        }, Duration.seconds(0.5));
+            int dx = entityIsAtRightSide.get() ? -5 : 5;
+            enemies.forEach(enemy -> enemy.translateX(dx));
+        }, Duration.seconds(0.25));
     }
-
 }

@@ -17,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import wtf.devops.spaceinvader.components.BulletComponent;
+import wtf.devops.spaceinvader.components.EnemyComponent;
 import wtf.devops.spaceinvader.components.OwnerComponent;
 import wtf.devops.spaceinvader.components.PlayerComponent;
 
@@ -49,8 +50,10 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.at(owner.getCenter().add(-3, 20))
 				.bbox(new HitBox(BoundingShape.box(9, 20)))
 				.view(new Rectangle(10, 10, Color.BROWN))
-				.with(new CollidableComponent(true), new OwnerComponent(owner.getType()))
-				.with(new OffscreenCleanComponent(), new BulletComponent(850))
+				.with(new OwnerComponent(owner.getType()))
+				.with(new CollidableComponent(true))
+				.with(new OffscreenCleanComponent())
+				.with(new BulletComponent(850))
 				.build();
 	}
 	
@@ -64,8 +67,11 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 
 		return FXGL.entityBuilder(data)
 					.at(positionX,getAppHeight() - (double) positionY - 40)
+					.type(ENEMY)
 					.viewWithBBox(texture)
 				    .scale(4,4)
+					.with(new CollidableComponent(true))
+					.with(new EnemyComponent())
 					.build();
 	}
 	

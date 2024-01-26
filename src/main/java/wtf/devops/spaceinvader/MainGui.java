@@ -72,6 +72,18 @@ public class MainGui extends GameApplication {
     }
 
     @Override
+    protected void initPhysics() {
+        FXGL.onCollisionBegin(EntityType.BULLET, EntityType.ENEMY, (bullet, enemy) -> {
+            enemies.remove(enemy);
+
+            FXGL.inc("score", +10);
+
+            FXGL.getGameWorld().removeEntity(bullet);
+            FXGL.getGameWorld().removeEntity(enemy);
+        });
+    }
+
+    @Override
     protected void initGameVars(Map<String, Object> vars) {
         vars.put("score", 0);
     }

@@ -22,5 +22,15 @@ public class BulletOnEnemy extends CollisionHandler {
         FXGL.inc("score", +10);
         FXGL.getGameWorld().removeEntity(bullet);
         FXGL.getGameWorld().removeEntity(enemy);
+
+        if (this.enemies.isEmpty()) {
+            this.onGameEnd();
+        }
+    }
+
+    private void onGameEnd() {
+        FXGL.getDialogService().showMessageBox("Congratulation! You win!", () -> {
+            FXGL.getGameController().gotoMainMenu();
+        });
     }
 }

@@ -16,6 +16,7 @@ public class EnemyBulletOnPlayer extends CollisionHandler {
         PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
 
         FXGL.getGameWorld().removeEntity(enemyBullet);
+        FXGL.inc("lives", -1);
 
         playerComponent.setLifepoint(playerComponent.getLifepoint() - 1);
 

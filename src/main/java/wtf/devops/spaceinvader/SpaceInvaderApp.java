@@ -7,12 +7,11 @@ import com.almasb.fxgl.dsl.handlers.CollectibleHandler;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.texture.Texture;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import wtf.devops.spaceinvader.collision.BulletOnEnemy;
@@ -90,7 +89,19 @@ public class SpaceInvaderApp extends GameApplication {
                 "-fx-font-family: Impact;"
         );
 
+        Text lives = new Text();
+        lives.setTranslateX(560);
+        lives.setTranslateY(575);
+        lives.textProperty().bind(FXGL.getWorldProperties().intProperty("lives").asString());
+        lives.setFill(Color.rgb(255, 231, 68));
+        lives.setStyle(
+            "-fx-font-size: 24px;" +
+            "-fx-font-family: Impact;" +
+            "-fx-text-alignment: right"
+        );
+
         FXGL.getGameScene().addUINode(score);
+        FXGL.getGameScene().addUINode(lives);
     }
 
     @Override
@@ -104,5 +115,6 @@ public class SpaceInvaderApp extends GameApplication {
     @Override
     protected void initGameVars(Map<String, Object> vars) {
         vars.put("score", 0);
+        vars.put("lives", 10);
     }
 }

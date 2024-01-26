@@ -90,6 +90,13 @@ public class SpaceInvaderApp extends GameApplication {
             }
         });
 
+        getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.BULLET, EntityType.SHIELD) {
+            @Override
+            protected void onCollisionBegin(Entity bullet, Entity shield) {
+                FXGL.getGameWorld().removeEntity(bullet);
+            }
+        });
+
         getPhysicsWorld().addCollisionHandler(new CollisionHandler(EntityType.ENEMY_BULLET, EntityType.SHIELD) {
             @Override
             protected void onCollisionBegin(Entity enemyBullet, Entity shield) {

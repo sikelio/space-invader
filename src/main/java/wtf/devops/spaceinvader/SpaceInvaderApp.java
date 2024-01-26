@@ -7,7 +7,12 @@ import com.almasb.fxgl.dsl.handlers.CollectibleHandler;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.physics.CollisionHandler;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import wtf.devops.spaceinvader.collision.BulletOnEnemy;
@@ -48,6 +53,10 @@ public class SpaceInvaderApp extends GameApplication {
     @Override
     protected void initGame() {
     	getGameWorld().addEntityFactory(new SpaceInvaderEntityFactory());
+
+        Image backgroundImage = FXGL.image("background/background.png");
+        FXGL.getGameScene().setBackgroundRepeat(backgroundImage);
+
         this.player = getGameWorld().spawn("player");
 
         Wave enemiesWave = new Wave();
@@ -59,7 +68,6 @@ public class SpaceInvaderApp extends GameApplication {
         this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 200)));
         this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 375)));
         this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 525)));
-        
     }
 
     @Override

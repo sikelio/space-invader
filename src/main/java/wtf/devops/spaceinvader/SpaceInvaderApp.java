@@ -76,6 +76,12 @@ public class SpaceInvaderApp extends GameApplication {
     @Override
     protected void initPhysics() {
         FXGL.onCollisionBegin(EntityType.BULLET, EntityType.ENEMY, (bullet, enemy) -> {
+            Object owner = bullet.getComponent(OwnerComponent.class).getValue();
+
+            if (owner == EntityType.ENEMY) {
+                return;
+            }
+
             enemies.remove(enemy);
 
             FXGL.inc("score", +10);

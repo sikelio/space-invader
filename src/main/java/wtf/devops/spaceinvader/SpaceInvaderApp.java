@@ -10,6 +10,8 @@ import javafx.scene.text.Text;
 import wtf.devops.spaceinvader.common.*;
 import wtf.devops.spaceinvader.components.*;
 import wtf.devops.spaceinvader.common.Wave;
+import wtf.devops.spaceinvader.factories.SpaceInvaderEntityFactory;
+import wtf.devops.spaceinvader.factories.SpaceInvaderSceneFactory;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
@@ -18,7 +20,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Stack;
 
-public class MainGui extends GameApplication {
+public class SpaceInvaderApp extends GameApplication {
     public static void main(String[] args) {
         launch(args);
     }

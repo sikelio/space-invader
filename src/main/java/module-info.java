@@ -8,4 +8,6 @@ open module wtf.devops.spaceinvader {
     exports wtf.devops.spaceinvader;
     exports wtf.devops.spaceinvader.common;
     exports wtf.devops.spaceinvader.components;
+    exports wtf.devops.spaceinvader.custom;
+    exports wtf.devops.spaceinvader.factories;
 }

@@ -1,4 +1,4 @@
-package wtf.devops.spaceinvader;
+package wtf.devops.spaceinvader.custom;
 
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
@@ -9,11 +9,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 
-public class SpaceInvaderMainMenu extends FXGLMenu {
+public class MainMenu extends FXGLMenu {
     private final int buttonWidth = 200;
     private final int buttonHeight = 40;
 
-    public SpaceInvaderMainMenu(@NotNull MenuType type) {
+    public MainMenu(@NotNull MenuType type) {
         super(type);
 
         Image background = FXGL.image("background/background.png");

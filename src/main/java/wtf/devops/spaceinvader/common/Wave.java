@@ -23,10 +23,15 @@ public class Wave {
 
         for (int i = 0; i < 5; i++) {
             for (int e = 0; e < 12; e++) {
+                EnemyType type = determineEnemyType(i, e);
+
                 this.enemies.add(getGameWorld().
                     spawn(
                         "enemy",
-                        new SpawnData(0,0).put("X", this.xCord[e]).put("Y", this.yCord[i])
+                        new SpawnData(0,0)
+                                .put("X", this.xCord[e])
+                                .put("Y", this.yCord[i])
+                                .put("enemyType", type)
                     )
                 );
 
@@ -64,5 +69,13 @@ public class Wave {
         FXGL.getDialogService().showMessageBox("Game Over!", () -> {
             FXGL.getGameController().gotoMainMenu();
         });
+    }
+
+    private EnemyType determineEnemyType(int row, int col) {
+        return switch (row) {
+            case 0, 1 -> EnemyType.SQUID;
+            case 2, 3 -> EnemyType.OCTOPUS;
+            default -> EnemyType.CRAB;
+        };
     }
 }

@@ -7,15 +7,15 @@ import com.almasb.fxgl.entity.Entity;
 
 public class Enemy extends GameApplication {
     private String  lifepoint;
-    
-    private EnemyType enemyType;
+
     private float x;
     private float y;
+    private EnemyType enemyType;
 
-
-    public Enemy(float x, float y){
+    public Enemy(float x, float y, EnemyType enemyType){
         this.x = x;
         this.y = y;
+        this.enemyType = enemyType;
     }
 
     private void moove(){
@@ -38,6 +38,10 @@ public class Enemy extends GameApplication {
         return this.y;
     }
 
+    public EnemyType getEnemyType() {
+        return enemyType;
+    }
+
     public void setX(float x){
         this.x = x;
     }
@@ -46,7 +50,11 @@ public class Enemy extends GameApplication {
         this.y = y;
     }
 
-	@Override
+    public void setEnemyType(EnemyType enemyType) {
+        this.enemyType = enemyType;
+    }
+
+    @Override
 	protected void initSettings(GameSettings settings) {
 		// TODO Auto-generated method stub
 		

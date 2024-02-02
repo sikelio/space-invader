@@ -14,6 +14,8 @@ import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.texture.Texture;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import wtf.devops.spaceinvader.common.EnemyType;
 import wtf.devops.spaceinvader.components.*;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -33,7 +35,7 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.with(new CollidableComponent(true))
 				.with(new PlayerComponent(10))
 				.with("dead", true)
-				.buildAndAttach();
+				.build();
 	}
 	
 	@Spawns("bullet")
@@ -73,7 +75,16 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 		//EnemyType enemyType = data.get("enemyType");
 		int positionX = data.get("X");
 		int positionY = data.get("Y");
-		Texture texture = texture("aliens/mediumAlien.png");
+		EnemyType enemyType = data.get("enemyType");
+		Texture texture;
+
+		switch (enemyType) {
+			case CRAB -> texture = texture("aliens/crab.png");
+			case SQUID -> texture = texture("aliens/squid.png");
+			case OCTOPUS -> texture = texture("aliens/octopus.png");
+			default -> texture = texture("aliens/crab.png");
+		}
+
 		texture.outline(Color.BLACK);
 
 		return FXGL.entityBuilder(data)

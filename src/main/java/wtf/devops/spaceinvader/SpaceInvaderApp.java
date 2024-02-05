@@ -53,10 +53,8 @@ public class SpaceInvaderApp extends GameApplication {
     private Entity player1;
     private Entity player2;
     private HashSet<Entity> enemies;
-    private HashSet<Entity> enemies2;
 
-    private Stack<Entity> shield;
-    private Stack<Entity> shield2;
+    private Stack<Entity> shields;
 
     private Client<Bundle> client;
     private Input clientInput;
@@ -92,8 +90,6 @@ public class SpaceInvaderApp extends GameApplication {
                     client.connectAsync();
                 }
             });
-
-            System.out.println("tes");
         }, Duration.seconds(0.5));
     }
 
@@ -108,25 +104,28 @@ public class SpaceInvaderApp extends GameApplication {
         getService(MultiplayerService.class).spawn(connection, player2, "player");
 
         Wave enemiesWave = new Wave();
-        Wave enemiesWave2 = new Wave();
 
         this.enemies = enemiesWave.generateWave();
-        this.enemies2 = enemiesWave2.generateWave();
 
         enemiesWave.moveEnemies(this.enemies);
-        enemiesWave.moveEnemies(this.enemies2);
 
-        this.shield = new Stack<Entity>();
-        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 50)));
-        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 200)));
-        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 375)));
-        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 525)));
+        this.shields = new Stack<Entity>();
 
-        this.shield2 = new Stack<Entity>();
-        this.shield2.push(spawn("shield", new SpawnData(1, 1).put("x", 50)));
-        this.shield2.push(spawn("shield", new SpawnData(1, 1).put("x", 200)));
-        this.shield2.push(spawn("shield", new SpawnData(1, 1).put("x", 375)));
-        this.shield2.push(spawn("shield", new SpawnData(1, 1).put("x", 525)));
+        var shield = spawn("shield", new SpawnData(50, 1));
+        getService(MultiplayerService.class).spawn(connection, shield, "shield");
+        this.shields.push(shield);
+
+        shield = spawn("shield", new SpawnData(200, 1));
+        getService(MultiplayerService.class).spawn(connection, shield, "shield");
+        this.shields.push(shield);
+
+        shield = spawn("shield", new SpawnData(375, 1));
+        getService(MultiplayerService.class).spawn(connection, shield, "shield");
+        this.shields.push(shield);
+
+        shield = spawn("shield", new SpawnData(525, 1));
+        getService(MultiplayerService.class).spawn(connection, shield, "shield");
+        this.shields.push(shield);
 
         getService(MultiplayerService.class).addInputReplicationReceiver(connection, clientInput);
     }

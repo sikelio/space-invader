@@ -108,7 +108,7 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 		
 		return FXGL.entityBuilder(data)
 				.type(SHIELD)
-				.at(data.<Integer>get("x"), getAppHeight() - 175)
+				.at(data.getX(), getAppHeight() - 175)
 				.scale(3, 3)
 				.viewWithBBox(texture)
 				.with(new CollidableComponent(true))

@@ -3,6 +3,7 @@ package wtf.devops.spaceinvader.common;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.multiplayer.MultiplayerService;
 import com.almasb.fxgl.time.Timer;
 import javafx.util.Duration;
 
@@ -29,12 +30,11 @@ public class Wave {
                     spawn(
                         "enemy",
                         new SpawnData(0,0)
-                                .put("X", this.xCord[e])
-                                .put("Y", this.yCord[i])
-                                .put("enemyType", type)
+                            .put("X", this.xCord[e])
+                            .put("Y", this.yCord[i])
+                            .put("enemyType", type)
                     )
                 );
-
             }
         }
 

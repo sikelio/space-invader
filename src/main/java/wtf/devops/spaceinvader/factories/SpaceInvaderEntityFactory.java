@@ -77,9 +77,9 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 	@Spawns("enemy")
 	public Entity enemy(SpawnData data) {
 		//EnemyType enemyType = data.get("enemyType");
-		int positionX = data.get("X");
-		int positionY = data.get("Y");
-		EnemyType enemyType = data.get("enemyType");
+		Double positionX = data.getX();
+		Double positionY = data.getY();
+		EnemyType enemyType = EnemyType.randomValue();
 		Texture texture;
 
 		switch (enemyType) {

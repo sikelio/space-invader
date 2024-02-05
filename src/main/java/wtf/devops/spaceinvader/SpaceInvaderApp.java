@@ -75,6 +75,8 @@ public class SpaceInvaderApp extends GameApplication {
                     server.setOnConnected(conn -> {
                         connection = conn;
 
+                        FXGL.set("conn", connection);
+
                         getExecutor().startAsyncFX(() -> onServer());
                     });
 
@@ -109,7 +111,7 @@ public class SpaceInvaderApp extends GameApplication {
 
         enemiesWave.moveEnemies(this.enemies);
 
-        this.shields = new Stack<Entity>();
+        this.shields = new Stack<>();
 
         var shield = spawn("shield", new SpawnData(50, 1));
         getService(MultiplayerService.class).spawn(connection, shield, "shield");

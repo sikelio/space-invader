@@ -1,9 +1,11 @@
 package wtf.devops.spaceinvader.common;
 
+import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.multiplayer.MultiplayerService;
+import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.time.Timer;
 import javafx.util.Duration;
 
@@ -22,19 +24,20 @@ public class Wave {
     public HashSet<Entity> generateWave(){
         double delay = 0.3;
 
+        Connection<Bundle> connection = FXGL.geto("conn");
+
         for (int i = 0; i < 5; i++) {
             for (int e = 0; e < 12; e++) {
                 EnemyType type = determineEnemyType(i, e);
 
-                this.enemies.add(getGameWorld().
-                    spawn(
+                var enemy = spawn(
                         "enemy",
-                        new SpawnData(0,0)
-                            .put("X", this.xCord[e])
-                            .put("Y", this.yCord[i])
-                            .put("enemyType", type)
-                    )
+                        new SpawnData(this.xCord[e], this.yCord[i]).put("enemyType", type)
                 );
+
+                getService(MultiplayerService.class).spawn(connection, enemy, "enemy");
+
+                this.enemies.add(enemy);
             }
         }
 

@@ -15,8 +15,6 @@ public class EnemyBulletOnShield extends CollisionHandler {
 
     public EnemyBulletOnShield() {
         super(EntityType.ENEMY_BULLET, EntityType.SHIELD);
-
-        this.client = FXGL.geto("networkClient");
     }
 
     @Override
@@ -29,16 +27,12 @@ public class EnemyBulletOnShield extends CollisionHandler {
 
         if (shieldComponent.getLifepoint() <= 1000 && shieldComponent.getLifepoint() >= 666) {
             shieldComponent.setState(ShieldState.New);
-            this.sendEnemyAction("shieldNew");
         } else if (shieldComponent.getLifepoint() < 666 && shieldComponent.getLifepoint() >= 333) {
             shieldComponent.setState(ShieldState.SlightlyDamaged);
-            this.sendEnemyAction("shieldSlightlyDamaged");
         } else if (shieldComponent.getLifepoint() < 333 && shieldComponent.getLifepoint() > 0) {
             shieldComponent.setState(ShieldState.Damaged);
-            this.sendEnemyAction("shieldDamaged");
         }  else if (shieldComponent.getLifepoint() <= 0) {
             shieldComponent.setState(ShieldState.Destroyed);
-            this.sendEnemyAction("shieldDestroyed");
         }
 
         shieldComponent.updateTexture();
@@ -48,7 +42,7 @@ public class EnemyBulletOnShield extends CollisionHandler {
         }
     }
 
-    private void sendEnemyAction(String action) {
+    /*private void sendEnemyAction(String action) {
         if (this.client != null) {
             Bundle message = new Bundle("EnemyAction");
             message.put("action", action);
@@ -56,5 +50,5 @@ public class EnemyBulletOnShield extends CollisionHandler {
         } else {
             System.out.println("Connection is not established.");
         }
-    }
+    }*/
 }

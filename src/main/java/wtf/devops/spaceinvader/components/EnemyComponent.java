@@ -17,10 +17,6 @@ public class EnemyComponent extends Component {
     protected Duration nextAttack = Duration.seconds(2);
     private Connection<Bundle> client;
 
-    public EnemyComponent() {
-        this.client = FXGL.geto("networkClient");
-    }
-
     @Override
     public void onAdded() {
         this.attackCooldown = FXGL.newLocalTimer();
@@ -32,7 +28,6 @@ public class EnemyComponent extends Component {
         if (attackCooldown.elapsed(nextAttack)) {
             if (FXGLMath.randomBoolean(0.3f)) {
                 this.shoot();
-                this.sendEnemyAction("shoot");
             }
 
             this.nextAttack = Duration.seconds(5 * Math.random());
@@ -48,7 +43,7 @@ public class EnemyComponent extends Component {
         entity.removeFromWorld();
     }
 
-    private void sendEnemyAction(String action) {
+    /*private void sendEnemyAction(String action) {
         if (this.client != null) {
             Bundle message = new Bundle("EnemyAction");
             message.put("action", action);
@@ -56,5 +51,5 @@ public class EnemyComponent extends Component {
         } else {
             System.out.println("Connection is not established.");
         }
-    }
+    }*/
 }

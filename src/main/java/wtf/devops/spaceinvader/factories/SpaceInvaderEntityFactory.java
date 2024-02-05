@@ -9,6 +9,7 @@ import com.almasb.fxgl.entity.Spawns;
 
 
 import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.multiplayer.NetworkComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.texture.Texture;
@@ -34,6 +35,7 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.viewWithBBox(texture)
 				.with(new CollidableComponent(true))
 				.with(new PlayerComponent(10))
+				.with(new NetworkComponent())
 				.with("dead", true)
 				.build();
 	}
@@ -51,6 +53,7 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.with(new CollidableComponent(true))
 				.with(new OffscreenCleanComponent())
 				.with(new BulletComponent(850))
+				.with(new NetworkComponent())
 				.build();
 	}
 
@@ -67,6 +70,7 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.with(new CollidableComponent(true))
 				.with(new OffscreenCleanComponent())
 				.with(new EnemyBulletComponent(850))
+				.with(new NetworkComponent())
 				.build();
 	}
 	
@@ -94,6 +98,7 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.scale(4,4)
 				.with(new CollidableComponent(true))
 				.with(new EnemyComponent())
+				.with(new NetworkComponent())
 				.build();
 	}
 	
@@ -108,6 +113,7 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.viewWithBBox(texture)
 				.with(new CollidableComponent(true))
 				.with(new ShieldComponent())
+				.with(new NetworkComponent())
 				.build();
 	}
 

@@ -1,9 +1,11 @@
 package wtf.devops.spaceinvader.components;
 
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.time.LocalTimer;
 
 import javafx.util.Duration;
@@ -13,6 +15,11 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 public class EnemyComponent extends Component {
     protected LocalTimer attackCooldown;
     protected Duration nextAttack = Duration.seconds(2);
+    private Connection<Bundle> client;
+
+    public EnemyComponent() {
+        this.client = FXGL.geto("networkClient");
+    }
 
     @Override
     public void onAdded() {
@@ -25,6 +32,7 @@ public class EnemyComponent extends Component {
         if (attackCooldown.elapsed(nextAttack)) {
             if (FXGLMath.randomBoolean(0.3f)) {
                 this.shoot();
+                this.sendEnemyAction("shoot");
             }
 
             this.nextAttack = Duration.seconds(5 * Math.random());
@@ -38,5 +46,15 @@ public class EnemyComponent extends Component {
 
     public void die() {
         entity.removeFromWorld();
+    }
+
+    private void sendEnemyAction(String action) {
+        if (this.client != null) {
+            Bundle message = new Bundle("EnemyAction");
+            message.put("action", action);
+            this.client.send(message);
+        } else {
+            System.out.println("Connection is not established.");
+        }
     }
 }

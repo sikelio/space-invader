@@ -110,4 +110,13 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.with(new ShieldComponent())
 				.build();
 	}
+
+	@Spawns("opponentView")
+	public Entity opponentView(SpawnData data) {
+		// Utilisez un grand rectangle comme placeholder
+		return FXGL.entityBuilder(data)
+				.view(new Rectangle(300, 300, Color.GRAY))
+				.at(300, 0) // Ajustez selon la mise en page
+				.build();
+	}
 }

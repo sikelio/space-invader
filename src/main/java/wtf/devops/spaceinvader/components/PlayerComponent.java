@@ -1,10 +1,10 @@
 package wtf.devops.spaceinvader.components;
 
+import com.almasb.fxgl.core.serialization.Bundle;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
-import com.almasb.fxgl.entity.components.TransformComponent;
-
-import java.io.Console;
+import com.almasb.fxgl.net.Connection;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
@@ -15,9 +15,11 @@ public class PlayerComponent extends Component {
     private boolean canShoot = true;
     private double lastTimeShoot = 0;
     private int lifepoint;
+    Connection<Bundle> client;
 
     public PlayerComponent(int lifepoint) {
         this.lifepoint = lifepoint;
+        this.client = FXGL.geto("networkClient");
     }
 
     @Override
@@ -32,13 +34,19 @@ public class PlayerComponent extends Component {
     }
 
     public void left() {
-        if (getEntity().getX() - dx >= 0)
+        if (getEntity().getX() - dx >= 0) {
             getEntity().translateX(-dx);
+
+            this.sendPlayerAction("moveLeft");
+        }
     }
 
     public void right() {
-        if (getEntity().getX() + getEntity().getWidth() + dx <= 600)
+        if (getEntity().getX() + getEntity().getWidth() + dx <= 600) {
             getEntity().translateX(dx);
+
+            this.sendPlayerAction("moveRight");
+        }
     }
 
     public void shoot() {
@@ -50,6 +58,7 @@ public class PlayerComponent extends Component {
         this.lastTimeShoot = getGameTimer().getNow();
 
         spawn("bullet", new SpawnData(0, 0).put("owner", getEntity()));
+        this.sendPlayerAction("shoot");
     }
 
     public int getLifepoint() {
@@ -58,5 +67,15 @@ public class PlayerComponent extends Component {
 
     public void setLifepoint(int lifepoint) {
         this.lifepoint = lifepoint;
+    }
+
+    private void sendPlayerAction(String action) {
+        if (this.client != null) {
+            Bundle message = new Bundle("PlayerAction");
+            message.put("action", action);
+            this.client.send(message);
+        } else {
+            System.out.println("Connection is not established.");
+        }
     }
 }

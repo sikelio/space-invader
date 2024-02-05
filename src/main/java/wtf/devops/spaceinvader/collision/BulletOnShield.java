@@ -12,17 +12,14 @@ public class BulletOnShield extends CollisionHandler {
 
     public BulletOnShield() {
         super(EntityType.BULLET, EntityType.SHIELD);
-        this.client = FXGL.geto("networkClient");
     }
 
     @Override
     protected void onCollisionBegin(Entity bullet, Entity shield) {
         FXGL.getGameWorld().removeEntity(bullet);
-
-        this.sendPlayerAction("nullBullet");
     }
 
-    private void sendPlayerAction(String action) {
+    /*private void sendPlayerAction(String action) {
         if (this.client != null) {
             Bundle message = new Bundle("PlayerAction");
             message.put("action", action);
@@ -30,5 +27,5 @@ public class BulletOnShield extends CollisionHandler {
         } else {
             System.out.println("Connection is not established.");
         }
-    }
+    }*/
 }

@@ -19,7 +19,6 @@ public class PlayerComponent extends Component {
 
     public PlayerComponent(int lifepoint) {
         this.lifepoint = lifepoint;
-        this.client = FXGL.geto("networkClient");
     }
 
     @Override
@@ -36,16 +35,12 @@ public class PlayerComponent extends Component {
     public void left() {
         if (getEntity().getX() - dx >= 0) {
             getEntity().translateX(-dx);
-
-            this.sendPlayerAction("moveLeft");
         }
     }
 
     public void right() {
         if (getEntity().getX() + getEntity().getWidth() + dx <= 600) {
             getEntity().translateX(dx);
-
-            this.sendPlayerAction("moveRight");
         }
     }
 
@@ -58,7 +53,6 @@ public class PlayerComponent extends Component {
         this.lastTimeShoot = getGameTimer().getNow();
 
         spawn("bullet", new SpawnData(0, 0).put("owner", getEntity()));
-        this.sendPlayerAction("shoot");
     }
 
     public int getLifepoint() {
@@ -69,7 +63,7 @@ public class PlayerComponent extends Component {
         this.lifepoint = lifepoint;
     }
 
-    private void sendPlayerAction(String action) {
+    /* private void sendPlayerAction(String action) {
         if (this.client != null) {
             Bundle message = new Bundle("PlayerAction");
             message.put("action", action);
@@ -77,5 +71,5 @@ public class PlayerComponent extends Component {
         } else {
             System.out.println("Connection is not established.");
         }
-    }
+    }*/
 }

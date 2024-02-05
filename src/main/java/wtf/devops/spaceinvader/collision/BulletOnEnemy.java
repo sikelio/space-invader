@@ -16,7 +16,6 @@ public class BulletOnEnemy extends CollisionHandler {
     public BulletOnEnemy(HashSet<Entity> enemies) {
         super(EntityType.BULLET, EntityType.ENEMY);
         this.enemies = enemies;
-        this.client = FXGL.geto("networkClient");
     }
 
     @Override
@@ -27,10 +26,7 @@ public class BulletOnEnemy extends CollisionHandler {
         FXGL.getGameWorld().removeEntity(bullet);
         FXGL.getGameWorld().removeEntity(enemy);
 
-        this.sendPlayerAction("enemyDead");
-
         if (this.enemies.isEmpty()) {
-            this.sendPlayerAction("win");
             this.onGameEnd();
         }
     }
@@ -41,7 +37,7 @@ public class BulletOnEnemy extends CollisionHandler {
         });
     }
 
-    private void sendPlayerAction(String action) {
+    /*private void sendPlayerAction(String action) {
         if (this.client != null) {
             Bundle message = new Bundle("PlayerAction");
             message.put("action", action);
@@ -49,5 +45,5 @@ public class BulletOnEnemy extends CollisionHandler {
         } else {
             System.out.println("Connection is not established.");
         }
-    }
+    }*/
 }

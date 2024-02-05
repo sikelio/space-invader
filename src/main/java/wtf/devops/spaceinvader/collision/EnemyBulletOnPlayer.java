@@ -13,8 +13,6 @@ public class EnemyBulletOnPlayer extends CollisionHandler {
 
     public EnemyBulletOnPlayer() {
         super(EntityType.ENEMY_BULLET, EntityType.PLAYER);
-
-        this.client = FXGL.geto("networkClient");
     }
 
     @Override

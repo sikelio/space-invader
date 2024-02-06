@@ -48,7 +48,7 @@ public class PlayerComponent extends Component {
     }
 
     public void shoot() {
-        // Connection<Bundle> connection = FXGL.geto("conn");
+        Connection<Bundle> connection = FXGL.geto("conn");
 
         if (!canShoot) {
             return;
@@ -57,8 +57,8 @@ public class PlayerComponent extends Component {
         this.canShoot = false;
         this.lastTimeShoot = getGameTimer().getNow();
 
-        Entity bullet = spawn("bullet", new SpawnData(0, 0).put("owner", getEntity()));
-        //getService(MultiplayerService.class).spawn(connection, bullet, "bullet");
+        Entity bullet = spawn("bullet", new SpawnData(getEntity().getX(), getEntity().getY()));
+        getService(MultiplayerService.class).spawn(connection, bullet, "bullet");
     }
 
     public int getLifepoint() {

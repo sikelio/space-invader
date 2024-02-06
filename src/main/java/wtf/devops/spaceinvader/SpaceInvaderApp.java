@@ -217,8 +217,6 @@ public class SpaceInvaderApp extends GameApplication {
     @Override
     protected void onUpdate(double tpf) {
         if (this.isServer) {
-            System.out.println(tpf);
-
             this.clientInput.update(tpf);
         }
     }

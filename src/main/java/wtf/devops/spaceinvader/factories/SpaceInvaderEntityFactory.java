@@ -41,14 +41,11 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 
 	@Spawns("bullet")
 	public Entity bullet(SpawnData data) {
-		Entity owner = data.get("owner");
-
 		return FXGL.entityBuilder(data)
 				.type(BULLET)
-				.at(owner.getCenter().add(-3, 20))
 				.bbox(new HitBox(BoundingShape.box(9, 20)))
 				.view(new Rectangle(10, 10, Color.BROWN))
-				.with(new OwnerComponent(owner.getType()))
+				// .with(new OwnerComponent(owner.getType()))
 				.with(new CollidableComponent(true))
 				.with(new OffscreenCleanComponent())
 				.with(new BulletComponent(850))

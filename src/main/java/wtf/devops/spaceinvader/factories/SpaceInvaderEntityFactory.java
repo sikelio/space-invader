@@ -45,7 +45,6 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.type(BULLET)
 				.bbox(new HitBox(BoundingShape.box(9, 20)))
 				.view(new Rectangle(10, 10, Color.BROWN))
-				// .with(new OwnerComponent(owner.getType()))
 				.with(new CollidableComponent(true))
 				.with(new OffscreenCleanComponent())
 				.with(new BulletComponent(850))

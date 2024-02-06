@@ -12,7 +12,21 @@ public class BulletOnEnemy extends CollisionHandler {
 
     @Override
     protected void onCollisionBegin(Entity bullet, Entity enemy) {
-        FXGL.inc("score", +10);
+        System.out.println(bullet.getProperties());
+
+        if (bullet.getProperties().exists("playerID")) {
+            switch (bullet.getProperties().getValue("playerID").toString()) {
+                case "1":
+                    FXGL.inc("scorePlayer1", +10);
+                    break;
+                case "2":
+                    FXGL.inc("scorePlayer2", +10);
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected Player");
+            }
+        }
+
         FXGL.getGameWorld().removeEntity(bullet);
         FXGL.getGameWorld().removeEntity(enemy);
 

@@ -58,6 +58,7 @@ public class PlayerComponent extends Component {
         this.lastTimeShoot = getGameTimer().getNow();
 
         Entity bullet = spawn("bullet", new SpawnData(getEntity().getX(), getEntity().getY()));
+        bullet.setProperty("playerID", getEntity().getProperties().getValue("playerID").toString());
         getService(MultiplayerService.class).spawn(connection, bullet, "bullet");
     }
 

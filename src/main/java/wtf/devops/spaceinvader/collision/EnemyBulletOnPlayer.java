@@ -19,8 +19,20 @@ public class EnemyBulletOnPlayer extends CollisionHandler {
     protected void onCollisionBegin(Entity enemyBullet, Entity player) {
         PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
 
+        if (player.getProperties().exists("playerID")) {
+            switch (player.getProperties().getValue("playerID").toString()) {
+                case "1":
+                    FXGL.inc("livesPlayer1", -1);
+                    break;
+                case "2":
+                    FXGL.inc("livesPlayer2", -1);
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected Player");
+            }
+        }
+
         FXGL.getGameWorld().removeEntity(enemyBullet);
-        FXGL.inc("lives", -1);
 
         playerComponent.setLifepoint(playerComponent.getLifepoint() - 1);
 

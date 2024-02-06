@@ -7,6 +7,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.Input;
+import com.almasb.fxgl.minigames.MiniGameService;
 import com.almasb.fxgl.net.Client;
 import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.multiplayer.MultiplayerService;
@@ -108,11 +109,12 @@ public class SpaceInvaderApp extends GameApplication {
         Image backgroundImage = FXGL.image("background/background.png");
         FXGL.getGameScene().setBackgroundRepeat(backgroundImage);
 
-
         player1 = spawn("player");
+        player1.setProperty("playerID", 1);
         getService(MultiplayerService.class).spawn(connection, player1, "player");
 
         player2 = spawn("player");
+        player2.setProperty("playerID", 2);
         getService(MultiplayerService.class).spawn(connection, player2, "player");
 
         Wave enemiesWave = new Wave();
@@ -175,29 +177,15 @@ public class SpaceInvaderApp extends GameApplication {
 
     @Override
     protected void initUI() {
-        Text score = new Text();
-        score.setTranslateX(25);
-        score.setTranslateY(575);
-        score.textProperty().bind(FXGL.getWorldProperties().intProperty("score").asString());
-        score.setFill(Color.rgb(255, 231, 68));
-        score.setStyle(
-                "-fx-font-size: 24px;" +
-                        "-fx-font-family: Impact;"
-        );
+        Text scorePlayer1 = new Text();
+        Text scorePlayer2 = new Text();
+        Text livesPlayer1 = new Text();
+        Text livesPlayer2 = new Text();
 
-        Text lives = new Text();
-        lives.setTranslateX(560);
-        lives.setTranslateY(575);
-        lives.textProperty().bind(FXGL.getWorldProperties().intProperty("lives").asString());
-        lives.setFill(Color.rgb(255, 231, 68));
-        lives.setStyle(
-                "-fx-font-size: 24px;" +
-                        "-fx-font-family: Impact;" +
-                        "-fx-text-alignment: right"
-        );
-
-        FXGL.getGameScene().addUINode(score);
-        FXGL.getGameScene().addUINode(lives);
+        this.setupScoreText(scorePlayer1, 25, 525, "scorePlayer1");
+        this.setupScoreText(scorePlayer2, 25, 575, "scorePlayer2");
+        this.setupLivesText(livesPlayer1, 560, 525, "livesPlayer1");
+        this.setupLivesText(livesPlayer2, 560, 575, "livesPlayer2");
     }
 
     @Override
@@ -210,8 +198,11 @@ public class SpaceInvaderApp extends GameApplication {
 
     @Override
     protected void initGameVars(Map<String, Object> vars) {
-        vars.put("score", 0);
-        vars.put("lives", 10);
+        vars.put("scorePlayer1", 0);
+        vars.put("scorePlayer2", 0);
+
+        vars.put("livesPlayer1", 10);
+        vars.put("livesPlayer2", 10);
     }
 
     @Override
@@ -219,5 +210,32 @@ public class SpaceInvaderApp extends GameApplication {
         if (this.isServer) {
             this.clientInput.update(tpf);
         }
+    }
+
+    private void setupLivesText(Text text, int x, int y, String property) {
+        text.setTranslateX(x);
+        text.setTranslateY(y);
+        text.textProperty().bind(FXGL.getWorldProperties().intProperty(property).asString());
+        text.setFill(Color.rgb(255, 231, 68));
+        text.setStyle(
+            "-fx-font-size: 24px;" +
+            "-fx-font-family: Impact;" +
+            "-fx-text-alignment: right"
+        );
+
+        FXGL.getGameScene().addUINode(text);
+    }
+
+    private void setupScoreText(Text text, int x, int y, String property) {
+        text.setTranslateX(x);
+        text.setTranslateY(y);
+        text.textProperty().bind(FXGL.getWorldProperties().intProperty(property).asString());
+        text.setFill(Color.rgb(255, 231, 68));
+        text.setStyle(
+            "-fx-font-size: 24px;" +
+            "-fx-fAont-family: Impact;"
+        );
+
+        FXGL.getGameScene().addUINode(text);
     }
 }

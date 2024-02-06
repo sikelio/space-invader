@@ -27,6 +27,12 @@ import wtf.devops.spaceinvader.factories.SpaceInvaderSceneFactory;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
+import static com.mongodb.client.model.Filters.eq;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
 
 import java.util.HashSet;
 import java.util.Map;
@@ -55,11 +61,19 @@ public class SpaceInvaderApp extends GameApplication {
     private Client<Bundle> client;
     private Input clientInput;
     private Connection<Bundle> connection;
-
+    private Boolean isLaunched;
     private Boolean isServer;
+
+    private MongoDatabase database;
+    private MongoCollection<Document> playerCollection = database.getCollection("player");
 
     @Override
     protected void initGame() {
+        String uri = "mongodb+srv://root:<password>@space-invaader.g6smgyu.mongodb.net/?retryWrites=true&w=majority";
+
+        try(MongoClient mongoClient = MongoClients.create(uri)){
+            this.database = mongoClient.getDatabase("space-invader");
+        }
         runOnce(() -> {
             getDialogService().showConfirmationBox("Est tu le serveur ?", yes -> {
                 isServer = yes;
@@ -95,10 +109,11 @@ public class SpaceInvaderApp extends GameApplication {
         Image backgroundImage = FXGL.image("background/background.png");
         FXGL.getGameScene().setBackgroundRepeat(backgroundImage);
 
-        player1 = getGameWorld().spawn("player");
+
+        player1 = spawn("player");
         getService(MultiplayerService.class).spawn(connection, player1, "player");
 
-        player2 = getGameWorld().spawn("player");
+        player2 = spawn("player");
         getService(MultiplayerService.class).spawn(connection, player2, "player");
 
         Wave enemiesWave = new Wave();
@@ -127,8 +142,7 @@ public class SpaceInvaderApp extends GameApplication {
     }
 
     private void onClient() {
-        //this.player2 = new Entity();
-
+        player1 = new Entity();
         Image backgroundImage = FXGL.image("background/background.png");
         FXGL.getGameScene().setBackgroundRepeat(backgroundImage);
 
@@ -138,15 +152,44 @@ public class SpaceInvaderApp extends GameApplication {
 
     @Override
     protected void initInput() {
-        onKey(KeyCode.LEFT, () -> this.player1.getComponent(PlayerComponent.class).left());
-        onKey(KeyCode.RIGHT, () -> this.player1.getComponent(PlayerComponent.class).right());
-        onKey(KeyCode.SPACE, () -> this.player1.getComponent(PlayerComponent.class).shoot());
+            onKey(KeyCode.LEFT, () -> {
+                if (player1 != null && player1.hasComponent(PlayerComponent.class)) {
+                    player1.getComponent(PlayerComponent.class).left();
+                }
+            });
+            onKey(KeyCode.RIGHT, () -> {
+                if (player1 != null && player1.hasComponent(PlayerComponent.class)) {
+                    player1.getComponent(PlayerComponent.class).right();
+                }
+            });
+            onKey(KeyCode.SPACE, () -> {
+                if (player1 != null && player1.hasComponent(PlayerComponent.class)) {
+                    player1.getComponent(PlayerComponent.class).shoot();
+                }
+            });
 
-        clientInput = new Input();
+            System.out.println("player1" + this.player1);
+            System.out.println("player2" + this.player2);
 
-        onKeyBuilder(clientInput, KeyCode.LEFT).onAction(() -> this.player2.getComponent(PlayerComponent.class).left());
-        onKeyBuilder(clientInput, KeyCode.RIGHT).onAction(() -> this.player2.getComponent(PlayerComponent.class).right());
-        onKeyBuilder(clientInput, KeyCode.SPACE).onAction(() -> this.player2.getComponent(PlayerComponent.class).shoot());
+            clientInput = new Input();
+
+            onKeyBuilder(clientInput, KeyCode.LEFT).onAction(() -> {
+                if (player2 != null && player2.hasComponent(PlayerComponent.class)) {
+                    player2.getComponent(PlayerComponent.class).left();
+                }
+            });
+            onKeyBuilder(clientInput, KeyCode.RIGHT).onAction(() -> {
+                if (player2 != null && player2.hasComponent(PlayerComponent.class)) {
+                    player2.getComponent(PlayerComponent.class).right();
+                }
+            });
+            onKeyBuilder(clientInput, KeyCode.SPACE).onAction(() -> {
+                System.out.println("TESTTTTTTTT");
+
+                if (player2 != null && player2.hasComponent(PlayerComponent.class)) {
+                    player2.getComponent(PlayerComponent.class).shoot();
+                }
+            });
     }
 
     @Override

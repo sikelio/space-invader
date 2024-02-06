@@ -62,14 +62,4 @@ public class PlayerComponent extends Component {
     public void setLifepoint(int lifepoint) {
         this.lifepoint = lifepoint;
     }
-
-    /* private void sendPlayerAction(String action) {
-        if (this.client != null) {
-            Bundle message = new Bundle("PlayerAction");
-            message.put("action", action);
-            this.client.send(message);
-        } else {
-            System.out.println("Connection is not established.");
-        }
-    }*/
 }

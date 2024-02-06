@@ -36,7 +36,6 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.with(new CollidableComponent(true))
 				.with(new PlayerComponent(10))
 				.with(new NetworkComponent())
-				.with("dead", true)
 				.build();
 	}
 	

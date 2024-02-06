@@ -5,25 +5,18 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
 import wtf.devops.spaceinvader.common.EntityType;
 
-import java.util.HashSet;
-
 public class BulletOnEnemy extends CollisionHandler {
-    private HashSet<Entity> enemies;
-
-    public BulletOnEnemy(HashSet<Entity> enemies) {
+    public BulletOnEnemy() {
         super(EntityType.BULLET, EntityType.ENEMY);
-        this.enemies = enemies;
     }
 
     @Override
     protected void onCollisionBegin(Entity bullet, Entity enemy) {
-        this.enemies.remove(enemy);
-
         FXGL.inc("score", +10);
         FXGL.getGameWorld().removeEntity(bullet);
         FXGL.getGameWorld().removeEntity(enemy);
 
-        if (this.enemies.isEmpty()) {
+        if (FXGL.getGameWorld().getEntitiesByType(EntityType.ENEMY).isEmpty()) {
             this.onGameEnd();
         }
     }

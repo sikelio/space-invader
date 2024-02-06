@@ -20,8 +20,6 @@ import wtf.devops.spaceinvader.collision.BulletOnEnemy;
 import wtf.devops.spaceinvader.collision.BulletOnShield;
 import wtf.devops.spaceinvader.collision.EnemyBulletOnPlayer;
 import wtf.devops.spaceinvader.collision.EnemyBulletOnShield;
-import wtf.devops.spaceinvader.common.EnemyType;
-import wtf.devops.spaceinvader.common.Player;
 import wtf.devops.spaceinvader.components.*;
 import wtf.devops.spaceinvader.common.Wave;
 import wtf.devops.spaceinvader.factories.SpaceInvaderEntityFactory;
@@ -53,9 +51,7 @@ public class SpaceInvaderApp extends GameApplication {
     private Entity player1;
     private Entity player2;
     private HashSet<Entity> enemies;
-
     private Stack<Entity> shields;
-
     private Client<Bundle> client;
     private Input clientInput;
     private Connection<Bundle> connection;
@@ -106,9 +102,7 @@ public class SpaceInvaderApp extends GameApplication {
         getService(MultiplayerService.class).spawn(connection, player2, "player");
 
         Wave enemiesWave = new Wave();
-
         this.enemies = enemiesWave.generateWave();
-
         enemiesWave.moveEnemies(this.enemies);
 
         this.shields = new Stack<>();
@@ -184,7 +178,7 @@ public class SpaceInvaderApp extends GameApplication {
 
     @Override
     protected void initPhysics() {
-        getPhysicsWorld().addCollisionHandler(new BulletOnEnemy(this.enemies));
+        getPhysicsWorld().addCollisionHandler(new BulletOnEnemy());
         getPhysicsWorld().addCollisionHandler(new BulletOnShield());
         getPhysicsWorld().addCollisionHandler(new EnemyBulletOnShield());
         getPhysicsWorld().addCollisionHandler(new EnemyBulletOnPlayer());

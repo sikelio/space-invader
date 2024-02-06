@@ -4,6 +4,8 @@ open module wtf.devops.spaceinvader {
 
     requires com.almasb.fxgl.all;
     requires annotations;
+    requires org.mongodb.driver.sync.client;
+    requires org.mongodb.driver.core;
 
     exports wtf.devops.spaceinvader;
     exports wtf.devops.spaceinvader.common;

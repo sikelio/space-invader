@@ -22,12 +22,9 @@ public class EnemyBulletOnPlayer extends CollisionHandler {
         FXGL.getGameWorld().removeEntity(enemyBullet);
         FXGL.inc("lives", -1);
 
-        this.sendEnnemyAction("touchedPlayer");
-
         playerComponent.setLifepoint(playerComponent.getLifepoint() - 1);
 
         if (playerComponent.getLifepoint() <= 0) {
-            this.sendEnnemyAction("playerDead");
             this.onGameEnd();
         }
     }
@@ -36,15 +33,5 @@ public class EnemyBulletOnPlayer extends CollisionHandler {
         FXGL.getDialogService().showMessageBox("Game Over!", () -> {
             FXGL.getGameController().gotoMainMenu();
         });
-    }
-
-    private void sendEnnemyAction(String action) {
-        if (this.client != null) {
-            Bundle message = new Bundle("EnemyAction");
-            message.put("action", action);
-            this.client.send(message);
-        } else {
-            System.out.println("Connection is not established.");
-        }
     }
 }

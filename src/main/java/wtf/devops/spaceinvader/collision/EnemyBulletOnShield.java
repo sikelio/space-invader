@@ -41,14 +41,4 @@ public class EnemyBulletOnShield extends CollisionHandler {
             FXGL.getGameWorld().removeEntity(shield);
         }
     }
-
-    /*private void sendEnemyAction(String action) {
-        if (this.client != null) {
-            Bundle message = new Bundle("EnemyAction");
-            message.put("action", action);
-            this.client.send(message);
-        } else {
-            System.out.println("Connection is not established.");
-        }
-    }*/
 }

@@ -2,10 +2,13 @@ package wtf.devops.spaceinvader.components;
 
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.multiplayer.MultiplayerService;
 import com.almasb.fxgl.net.Connection;
 
+import static com.almasb.fxgl.dsl.FXGL.getService;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
@@ -45,6 +48,8 @@ public class PlayerComponent extends Component {
     }
 
     public void shoot() {
+        Connection<Bundle> connection = FXGL.geto("conn");
+
         if (!canShoot) {
             return;
         }
@@ -52,7 +57,8 @@ public class PlayerComponent extends Component {
         this.canShoot = false;
         this.lastTimeShoot = getGameTimer().getNow();
 
-        spawn("bullet", new SpawnData(0, 0).put("owner", getEntity()));
+        Entity bullet = spawn("bullet", new SpawnData(getEntity().getX(), getEntity().getY()));
+        getService(MultiplayerService.class).spawn(connection, bullet, "bullet");
     }
 
     public int getLifepoint() {
@@ -62,14 +68,4 @@ public class PlayerComponent extends Component {
     public void setLifepoint(int lifepoint) {
         this.lifepoint = lifepoint;
     }
-
-    /* private void sendPlayerAction(String action) {
-        if (this.client != null) {
-            Bundle message = new Bundle("PlayerAction");
-            message.put("action", action);
-            this.client.send(message);
-        } else {
-            System.out.println("Connection is not established.");
-        }
-    }*/
 }

@@ -20,8 +20,6 @@ import wtf.devops.spaceinvader.collision.BulletOnEnemy;
 import wtf.devops.spaceinvader.collision.BulletOnShield;
 import wtf.devops.spaceinvader.collision.EnemyBulletOnPlayer;
 import wtf.devops.spaceinvader.collision.EnemyBulletOnShield;
-import wtf.devops.spaceinvader.common.EnemyType;
-import wtf.devops.spaceinvader.common.Player;
 import wtf.devops.spaceinvader.components.*;
 import wtf.devops.spaceinvader.common.Wave;
 import wtf.devops.spaceinvader.factories.SpaceInvaderEntityFactory;
@@ -29,6 +27,13 @@ import wtf.devops.spaceinvader.factories.SpaceInvaderSceneFactory;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
+import static com.mongodb.client.model.Filters.eq;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+
 
 import java.util.HashSet;
 import java.util.Map;
@@ -53,19 +58,21 @@ public class SpaceInvaderApp extends GameApplication {
     private Entity player1;
     private Entity player2;
     private HashSet<Entity> enemies;
-    private HashSet<Entity> enemies2;
-
-    private Stack<Entity> shield;
-    private Stack<Entity> shield2;
-
+    private Stack<Entity> shields;
     private Client<Bundle> client;
     private Input clientInput;
     private Connection<Bundle> connection;
-
-    private Boolean isServer;
+    private Boolean isServer = false;
+    private MongoDatabase database;
+    // private MongoCollection<Document> playerCollection = database.getCollection("player");
 
     @Override
     protected void initGame() {
+        String uri = "mongodb+srv://root:<password>@space-invaader.g6smgyu.mongodb.net/?retryWrites=true&w=majority";
+
+        try(MongoClient mongoClient = MongoClients.create(uri)){
+            this.database = mongoClient.getDatabase("space-invader");
+        }
         runOnce(() -> {
             getDialogService().showConfirmationBox("Est tu le serveur ?", yes -> {
                 isServer = yes;
@@ -73,16 +80,18 @@ public class SpaceInvaderApp extends GameApplication {
                 getGameWorld().addEntityFactory(new SpaceInvaderEntityFactory());
 
                 if (yes) {
-                    Server<Bundle> server = getNetService().newTCPServer(5555);
+                    Server<Bundle> server = getNetService().newTCPServer(55555);
                     server.setOnConnected(conn -> {
                         connection = conn;
+
+                        FXGL.set("conn", connection);
 
                         getExecutor().startAsyncFX(() -> onServer());
                     });
 
                     server.startAsync();
                 } else {
-                    Client<Bundle> client = getNetService().newTCPClient("localhost", 5555);
+                    Client<Bundle> client = getNetService().newTCPClient("localhost", 55555);
                     client.setOnConnected(conn -> {
                         connection = conn;
 
@@ -92,8 +101,6 @@ public class SpaceInvaderApp extends GameApplication {
                     client.connectAsync();
                 }
             });
-
-            System.out.println("tes");
         }, Duration.seconds(0.5));
     }
 
@@ -101,51 +108,69 @@ public class SpaceInvaderApp extends GameApplication {
         Image backgroundImage = FXGL.image("background/background.png");
         FXGL.getGameScene().setBackgroundRepeat(backgroundImage);
 
-        // CLIENT
-        player1 = getGameWorld().spawn("player");
+
+        player1 = spawn("player");
         getService(MultiplayerService.class).spawn(connection, player1, "player");
-        // Server
-        player2 = getGameWorld().spawn("player");
+
+        player2 = spawn("player");
         getService(MultiplayerService.class).spawn(connection, player2, "player");
 
         Wave enemiesWave = new Wave();
-        Wave enemiesWave2 = new Wave();
-
         this.enemies = enemiesWave.generateWave();
-        this.enemies2 = enemiesWave2.generateWave();
-
         enemiesWave.moveEnemies(this.enemies);
-        enemiesWave.moveEnemies(this.enemies2);
 
-        this.shield = new Stack<Entity>();
-        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 50)));
-        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 200)));
-        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 375)));
-        this.shield.push(spawn("shield", new SpawnData(1, 1).put("x", 525)));
+        this.shields = new Stack<>();
 
-        this.shield2 = new Stack<Entity>();
-        this.shield2.push(spawn("shield", new SpawnData(1, 1).put("x", 50)));
-        this.shield2.push(spawn("shield", new SpawnData(1, 1).put("x", 200)));
-        this.shield2.push(spawn("shield", new SpawnData(1, 1).put("x", 375)));
-        this.shield2.push(spawn("shield", new SpawnData(1, 1).put("x", 525)));
+        var shield = spawn("shield", new SpawnData(50, 1));
+        getService(MultiplayerService.class).spawn(connection, shield, "shield");
+        this.shields.push(shield);
 
+        shield = spawn("shield", new SpawnData(200, 1));
+        getService(MultiplayerService.class).spawn(connection, shield, "shield");
+        this.shields.push(shield);
 
-        // System.out.println(getService(MultiplayerService.class).addInputReplicationReceiver(connection, clientInput));
+        shield = spawn("shield", new SpawnData(375, 1));
+        getService(MultiplayerService.class).spawn(connection, shield, "shield");
+        this.shields.push(shield);
+
+        shield = spawn("shield", new SpawnData(525, 1));
+        getService(MultiplayerService.class).spawn(connection, shield, "shield");
+        this.shields.push(shield);
+
+        getService(MultiplayerService.class).addInputReplicationReceiver(connection, clientInput);
     }
 
-    private void onClient(){
+    private void onClient() {
+        Image backgroundImage = FXGL.image("background/background.png");
+        FXGL.getGameScene().setBackgroundRepeat(backgroundImage);
 
+        getService(MultiplayerService.class).addEntityReplicationReceiver(connection, getGameWorld());
+        getService(MultiplayerService.class).addInputReplicationSender(connection, getInput());
     }
 
     @Override
     protected void initInput() {
+        onKey(KeyCode.LEFT, () -> {
+            if (player1 != null && player1.hasComponent(PlayerComponent.class)) {
+                player1.getComponent(PlayerComponent.class).left();
+            }
+        });
+        onKey(KeyCode.RIGHT, () -> {
+            if (player1 != null && player1.hasComponent(PlayerComponent.class)) {
+                player1.getComponent(PlayerComponent.class).right();
+            }
+        });
+        onKey(KeyCode.SPACE, () -> {
+            if (player1 != null && player1.hasComponent(PlayerComponent.class)) {
+                player1.getComponent(PlayerComponent.class).shoot();
+            }
+        });
+
         clientInput = new Input();
 
-        onKeyBuilder(clientInput, KeyCode.SPACE).onAction(() -> this.player1.getComponent(PlayerComponent.class).shoot());
-
-        // onKey(KeyCode.LEFT, () -> this.player.getComponent(PlayerComponent.class).left());
-        // onKey(KeyCode.RIGHT, () -> this.player.getComponent(PlayerComponent.class).right());
-        // onKey(KeyCode.SPACE, () -> this.player.getComponent(PlayerComponent.class).shoot());
+        onKeyBuilder(clientInput, KeyCode.LEFT).onAction(() -> player2.getComponent(PlayerComponent.class).left());
+        onKeyBuilder(clientInput, KeyCode.RIGHT).onAction(() -> player2.getComponent(PlayerComponent.class).right());
+        onKeyBuilder(clientInput, KeyCode.SPACE).onAction(() -> player2.getComponent(PlayerComponent.class).shoot());
     }
 
     @Override
@@ -157,7 +182,7 @@ public class SpaceInvaderApp extends GameApplication {
         score.setFill(Color.rgb(255, 231, 68));
         score.setStyle(
                 "-fx-font-size: 24px;" +
-                "-fx-font-family: Impact;"
+                        "-fx-font-family: Impact;"
         );
 
         Text lives = new Text();
@@ -166,9 +191,9 @@ public class SpaceInvaderApp extends GameApplication {
         lives.textProperty().bind(FXGL.getWorldProperties().intProperty("lives").asString());
         lives.setFill(Color.rgb(255, 231, 68));
         lives.setStyle(
-            "-fx-font-size: 24px;" +
-            "-fx-font-family: Impact;" +
-            "-fx-text-alignment: right"
+                "-fx-font-size: 24px;" +
+                        "-fx-font-family: Impact;" +
+                        "-fx-text-alignment: right"
         );
 
         FXGL.getGameScene().addUINode(score);
@@ -177,10 +202,10 @@ public class SpaceInvaderApp extends GameApplication {
 
     @Override
     protected void initPhysics() {
-        /* getPhysicsWorld().addCollisionHandler(new BulletOnEnemy(this.enemies));
+        getPhysicsWorld().addCollisionHandler(new BulletOnEnemy());
         getPhysicsWorld().addCollisionHandler(new BulletOnShield());
         getPhysicsWorld().addCollisionHandler(new EnemyBulletOnShield());
-        getPhysicsWorld().addCollisionHandler(new EnemyBulletOnPlayer()); */
+        getPhysicsWorld().addCollisionHandler(new EnemyBulletOnPlayer());
     }
 
     @Override
@@ -189,16 +214,10 @@ public class SpaceInvaderApp extends GameApplication {
         vars.put("lives", 10);
     }
 
-    /*private void initNetworkClient() {
-        this.client = getNetService().newTCPClient("localhost", 55555);
-        this.client.setOnConnected((connection) -> {
-            this.connection = connection;
-            FXGL.set("networkClient", connection);
-
-            connection.addMessageHandlerFX((conn, message) -> {
-                // Traiter les messages reçus
-            });
-        });
-        this.client.connectAsync();
-    }*/
+    @Override
+    protected void onUpdate(double tpf) {
+        if (this.isServer) {
+            this.clientInput.update(tpf);
+        }
+    }
 }

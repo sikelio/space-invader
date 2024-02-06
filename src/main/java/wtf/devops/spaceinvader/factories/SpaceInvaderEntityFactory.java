@@ -9,6 +9,7 @@ import com.almasb.fxgl.entity.Spawns;
 
 
 import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.multiplayer.NetworkComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.texture.Texture;
@@ -34,23 +35,21 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.viewWithBBox(texture)
 				.with(new CollidableComponent(true))
 				.with(new PlayerComponent(10))
-				.with("dead", true)
+				.with(new NetworkComponent())
 				.build();
 	}
-	
+
 	@Spawns("bullet")
 	public Entity bullet(SpawnData data) {
-		Entity owner = data.get("owner");
-
 		return FXGL.entityBuilder(data)
 				.type(BULLET)
-				.at(owner.getCenter().add(-3, 20))
 				.bbox(new HitBox(BoundingShape.box(9, 20)))
 				.view(new Rectangle(10, 10, Color.BROWN))
-				.with(new OwnerComponent(owner.getType()))
+				// .with(new OwnerComponent(owner.getType()))
 				.with(new CollidableComponent(true))
 				.with(new OffscreenCleanComponent())
 				.with(new BulletComponent(850))
+				.with(new NetworkComponent())
 				.build();
 	}
 
@@ -67,15 +66,16 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.with(new CollidableComponent(true))
 				.with(new OffscreenCleanComponent())
 				.with(new EnemyBulletComponent(850))
+				.with(new NetworkComponent())
 				.build();
 	}
-	
+
 	@Spawns("enemy")
 	public Entity enemy(SpawnData data) {
 		//EnemyType enemyType = data.get("enemyType");
-		int positionX = data.get("X");
-		int positionY = data.get("Y");
-		EnemyType enemyType = data.get("enemyType");
+		Double positionX = data.getX();
+		Double positionY = data.getY();
+		EnemyType enemyType = EnemyType.randomValue();
 		Texture texture;
 
 		switch (enemyType) {
@@ -94,20 +94,22 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.scale(4,4)
 				.with(new CollidableComponent(true))
 				.with(new EnemyComponent())
+				.with(new NetworkComponent())
 				.build();
 	}
-	
+
 	@Spawns("shield")
 	public Entity shield(SpawnData data) {
 		Texture texture = texture("shield/fullShield.png");
-		
+
 		return FXGL.entityBuilder(data)
 				.type(SHIELD)
-				.at(data.<Integer>get("x"), getAppHeight() - 175)
+				.at(data.getX(), getAppHeight() - 175)
 				.scale(3, 3)
 				.viewWithBBox(texture)
 				.with(new CollidableComponent(true))
 				.with(new ShieldComponent())
+				.with(new NetworkComponent())
 				.build();
 	}
 

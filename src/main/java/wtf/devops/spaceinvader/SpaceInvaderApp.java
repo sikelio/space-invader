@@ -28,6 +28,7 @@ import wtf.devops.spaceinvader.factories.SpaceInvaderSceneFactory;
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Stack;
@@ -56,7 +57,7 @@ public class SpaceInvaderApp extends GameApplication {
     private Input clientInput;
     private Connection<Bundle> connection;
 
-    private Boolean isServer;
+    private Boolean isServer = false;
 
     @Override
     protected void initGame() {
@@ -127,8 +128,6 @@ public class SpaceInvaderApp extends GameApplication {
     }
 
     private void onClient() {
-        //this.player2 = new Entity();
-
         Image backgroundImage = FXGL.image("background/background.png");
         FXGL.getGameScene().setBackgroundRepeat(backgroundImage);
 
@@ -138,15 +137,27 @@ public class SpaceInvaderApp extends GameApplication {
 
     @Override
     protected void initInput() {
-        onKey(KeyCode.LEFT, () -> this.player1.getComponent(PlayerComponent.class).left());
-        onKey(KeyCode.RIGHT, () -> this.player1.getComponent(PlayerComponent.class).right());
-        onKey(KeyCode.SPACE, () -> this.player1.getComponent(PlayerComponent.class).shoot());
+        onKey(KeyCode.LEFT, () -> {
+            if (player1 != null && player1.hasComponent(PlayerComponent.class)) {
+                player1.getComponent(PlayerComponent.class).left();
+            }
+        });
+        onKey(KeyCode.RIGHT, () -> {
+            if (player1 != null && player1.hasComponent(PlayerComponent.class)) {
+                player1.getComponent(PlayerComponent.class).right();
+            }
+        });
+        onKey(KeyCode.SPACE, () -> {
+            if (player1 != null && player1.hasComponent(PlayerComponent.class)) {
+                player1.getComponent(PlayerComponent.class).shoot();
+            }
+        });
 
         clientInput = new Input();
 
-        onKeyBuilder(clientInput, KeyCode.LEFT).onAction(() -> this.player2.getComponent(PlayerComponent.class).left());
-        onKeyBuilder(clientInput, KeyCode.RIGHT).onAction(() -> this.player2.getComponent(PlayerComponent.class).right());
-        onKeyBuilder(clientInput, KeyCode.SPACE).onAction(() -> this.player2.getComponent(PlayerComponent.class).shoot());
+        onKeyBuilder(clientInput, KeyCode.LEFT).onAction(() -> player2.getComponent(PlayerComponent.class).left());
+        onKeyBuilder(clientInput, KeyCode.RIGHT).onAction(() -> player2.getComponent(PlayerComponent.class).right());
+        onKeyBuilder(clientInput, KeyCode.SPACE).onAction(() -> player2.getComponent(PlayerComponent.class).shoot());
     }
 
     @Override
@@ -157,8 +168,8 @@ public class SpaceInvaderApp extends GameApplication {
         score.textProperty().bind(FXGL.getWorldProperties().intProperty("score").asString());
         score.setFill(Color.rgb(255, 231, 68));
         score.setStyle(
-            "-fx-font-size: 24px;" +
-            "-fx-font-family: Impact;"
+                "-fx-font-size: 24px;" +
+                        "-fx-font-family: Impact;"
         );
 
         Text lives = new Text();
@@ -167,9 +178,9 @@ public class SpaceInvaderApp extends GameApplication {
         lives.textProperty().bind(FXGL.getWorldProperties().intProperty("lives").asString());
         lives.setFill(Color.rgb(255, 231, 68));
         lives.setStyle(
-            "-fx-font-size: 24px;" +
-            "-fx-font-family: Impact;" +
-            "-fx-text-alignment: right"
+                "-fx-font-size: 24px;" +
+                        "-fx-font-family: Impact;" +
+                        "-fx-text-alignment: right"
         );
 
         FXGL.getGameScene().addUINode(score);
@@ -188,5 +199,14 @@ public class SpaceInvaderApp extends GameApplication {
     protected void initGameVars(Map<String, Object> vars) {
         vars.put("score", 0);
         vars.put("lives", 10);
+    }
+
+    @Override
+    protected void onUpdate(double tpf) {
+        if (this.isServer) {
+            System.out.println(tpf);
+
+            this.clientInput.update(tpf);
+        }
     }
 }

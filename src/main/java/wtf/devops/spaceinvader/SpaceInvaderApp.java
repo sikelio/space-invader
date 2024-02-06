@@ -34,6 +34,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Stack;
@@ -61,11 +62,9 @@ public class SpaceInvaderApp extends GameApplication {
     private Client<Bundle> client;
     private Input clientInput;
     private Connection<Bundle> connection;
-    private Boolean isLaunched;
-    private Boolean isServer;
-
+    private Boolean isServer = false;
     private MongoDatabase database;
-    private MongoCollection<Document> playerCollection = database.getCollection("player");
+    // private MongoCollection<Document> playerCollection = database.getCollection("player");
 
     @Override
     protected void initGame() {
@@ -142,7 +141,6 @@ public class SpaceInvaderApp extends GameApplication {
     }
 
     private void onClient() {
-        player1 = new Entity();
         Image backgroundImage = FXGL.image("background/background.png");
         FXGL.getGameScene().setBackgroundRepeat(backgroundImage);
 
@@ -152,44 +150,27 @@ public class SpaceInvaderApp extends GameApplication {
 
     @Override
     protected void initInput() {
-            onKey(KeyCode.LEFT, () -> {
-                if (player1 != null && player1.hasComponent(PlayerComponent.class)) {
-                    player1.getComponent(PlayerComponent.class).left();
-                }
-            });
-            onKey(KeyCode.RIGHT, () -> {
-                if (player1 != null && player1.hasComponent(PlayerComponent.class)) {
-                    player1.getComponent(PlayerComponent.class).right();
-                }
-            });
-            onKey(KeyCode.SPACE, () -> {
-                if (player1 != null && player1.hasComponent(PlayerComponent.class)) {
-                    player1.getComponent(PlayerComponent.class).shoot();
-                }
-            });
+        onKey(KeyCode.LEFT, () -> {
+            if (player1 != null && player1.hasComponent(PlayerComponent.class)) {
+                player1.getComponent(PlayerComponent.class).left();
+            }
+        });
+        onKey(KeyCode.RIGHT, () -> {
+            if (player1 != null && player1.hasComponent(PlayerComponent.class)) {
+                player1.getComponent(PlayerComponent.class).right();
+            }
+        });
+        onKey(KeyCode.SPACE, () -> {
+            if (player1 != null && player1.hasComponent(PlayerComponent.class)) {
+                player1.getComponent(PlayerComponent.class).shoot();
+            }
+        });
 
-            System.out.println("player1" + this.player1);
-            System.out.println("player2" + this.player2);
+        clientInput = new Input();
 
-            clientInput = new Input();
-
-            onKeyBuilder(clientInput, KeyCode.LEFT).onAction(() -> {
-                if (player2 != null && player2.hasComponent(PlayerComponent.class)) {
-                    player2.getComponent(PlayerComponent.class).left();
-                }
-            });
-            onKeyBuilder(clientInput, KeyCode.RIGHT).onAction(() -> {
-                if (player2 != null && player2.hasComponent(PlayerComponent.class)) {
-                    player2.getComponent(PlayerComponent.class).right();
-                }
-            });
-            onKeyBuilder(clientInput, KeyCode.SPACE).onAction(() -> {
-                System.out.println("TESTTTTTTTT");
-
-                if (player2 != null && player2.hasComponent(PlayerComponent.class)) {
-                    player2.getComponent(PlayerComponent.class).shoot();
-                }
-            });
+        onKeyBuilder(clientInput, KeyCode.LEFT).onAction(() -> player2.getComponent(PlayerComponent.class).left());
+        onKeyBuilder(clientInput, KeyCode.RIGHT).onAction(() -> player2.getComponent(PlayerComponent.class).right());
+        onKeyBuilder(clientInput, KeyCode.SPACE).onAction(() -> player2.getComponent(PlayerComponent.class).shoot());
     }
 
     @Override
@@ -200,8 +181,8 @@ public class SpaceInvaderApp extends GameApplication {
         score.textProperty().bind(FXGL.getWorldProperties().intProperty("score").asString());
         score.setFill(Color.rgb(255, 231, 68));
         score.setStyle(
-            "-fx-font-size: 24px;" +
-            "-fx-font-family: Impact;"
+                "-fx-font-size: 24px;" +
+                        "-fx-font-family: Impact;"
         );
 
         Text lives = new Text();
@@ -210,9 +191,9 @@ public class SpaceInvaderApp extends GameApplication {
         lives.textProperty().bind(FXGL.getWorldProperties().intProperty("lives").asString());
         lives.setFill(Color.rgb(255, 231, 68));
         lives.setStyle(
-            "-fx-font-size: 24px;" +
-            "-fx-font-family: Impact;" +
-            "-fx-text-alignment: right"
+                "-fx-font-size: 24px;" +
+                        "-fx-font-family: Impact;" +
+                        "-fx-text-alignment: right"
         );
 
         FXGL.getGameScene().addUINode(score);
@@ -231,5 +212,14 @@ public class SpaceInvaderApp extends GameApplication {
     protected void initGameVars(Map<String, Object> vars) {
         vars.put("score", 0);
         vars.put("lives", 10);
+    }
+
+    @Override
+    protected void onUpdate(double tpf) {
+        if (this.isServer) {
+            System.out.println(tpf);
+
+            this.clientInput.update(tpf);
+        }
     }
 }

@@ -38,7 +38,7 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.with(new NetworkComponent())
 				.build();
 	}
-	
+
 	@Spawns("bullet")
 	public Entity bullet(SpawnData data) {
 		Entity owner = data.get("owner");
@@ -72,7 +72,7 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.with(new NetworkComponent())
 				.build();
 	}
-	
+
 	@Spawns("enemy")
 	public Entity enemy(SpawnData data) {
 		//EnemyType enemyType = data.get("enemyType");
@@ -100,11 +100,11 @@ public class SpaceInvaderEntityFactory implements EntityFactory {
 				.with(new NetworkComponent())
 				.build();
 	}
-	
+
 	@Spawns("shield")
 	public Entity shield(SpawnData data) {
 		Texture texture = texture("shield/fullShield.png");
-		
+
 		return FXGL.entityBuilder(data)
 				.type(SHIELD)
 				.at(data.getX(), getAppHeight() - 175)

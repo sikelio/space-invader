@@ -6,6 +6,7 @@ open module wtf.devops.spaceinvader {
     requires annotations;
     requires org.mongodb.driver.sync.client;
     requires org.mongodb.driver.core;
+    requires org.mongodb.bson;
 
     exports wtf.devops.spaceinvader;
     exports wtf.devops.spaceinvader.common;

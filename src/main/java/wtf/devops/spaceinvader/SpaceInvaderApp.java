@@ -11,6 +11,7 @@ import com.almasb.fxgl.net.Client;
 import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.multiplayer.MultiplayerService;
 import com.almasb.fxgl.net.Server;
+import com.mongodb.MongoException;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -27,10 +28,17 @@ import wtf.devops.spaceinvader.factories.SpaceInvaderSceneFactory;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
+
+import org.bson.Document;
+import org.bson.types.ObjectId;
+import org.bson.conversions.Bson;
+
 import static com.mongodb.client.model.Filters.eq;
+
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Projections;
 import com.mongodb.client.MongoDatabase;
 
 
@@ -64,15 +72,22 @@ public class SpaceInvaderApp extends GameApplication {
     private Connection<Bundle> connection;
     private Boolean isServer = false;
     private MongoDatabase database;
-    // private MongoCollection<Document> playerCollection = database.getCollection("player");
+
+    private MongoCollection<Document> playerCollection;
 
     @Override
     protected void initGame() {
-        String uri = "mongodb+srv://root:<password>@space-invaader.g6smgyu.mongodb.net/?retryWrites=true&w=majority";
+        String uri = "mongodb+srv://rootdev:..@space-invaader.g6smgyu.mongodb.net/?retryWrites=true&w=majority";
 
-        try(MongoClient mongoClient = MongoClients.create(uri)){
-            this.database = mongoClient.getDatabase("space-invader");
+        try (MongoClient mongoClient = MongoClients.create(uri)) {
+            MongoDatabase database = mongoClient.getDatabase("space-invader");
+            database.runCommand(new Document("ping", 1));
+        }catch(MongoException e){
+            e.printStackTrace();
         }
+
+
+
         runOnce(() -> {
             getDialogService().showConfirmationBox("Est tu le serveur ?", yes -> {
                 isServer = yes;

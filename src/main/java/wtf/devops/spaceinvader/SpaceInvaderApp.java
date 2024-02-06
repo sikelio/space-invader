@@ -77,7 +77,7 @@ public class SpaceInvaderApp extends GameApplication {
 
     @Override
     protected void initGame() {
-        String uri = "mongodb+srv://rootdev:..@space-invaader.g6smgyu.mongodb.net/?retryWrites=true&w=majority";
+        String uri = "mongodb+srv://rootdev:dev123@space-invaader.g6smgyu.mongodb.net/?retryWrites=true&w=majority";
 
         try (MongoClient mongoClient = MongoClients.create(uri)) {
             MongoDatabase database = mongoClient.getDatabase("space-invader");

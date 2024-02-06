@@ -3,15 +3,23 @@ package wtf.devops.spaceinvader.custom;
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
+import com.mongodb.MongoException;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
+
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getDialogService;
 
 public class MainMenu extends FXGLMenu {
     private final int buttonWidth = 200;
     private final int buttonHeight = 40;
+
 
     public MainMenu(@NotNull MenuType type) {
         super(type);
@@ -33,15 +41,23 @@ public class MainMenu extends FXGLMenu {
         startButton.setTranslateX((double) (FXGL.getAppWidth() - this.buttonWidth) / 2);
         startButton.setTranslateY(300);
 
+        Button leaderboard = new Button("Leaderboard");
+        leaderboard.setOnAction(e -> getDialogService().showMessageBox("Leaderboard", () -> {
+            System.out.println("You typed");
+        }));
+        leaderboard.setTranslateX((double) (FXGL.getAppWidth() - this.buttonWidth) / 2);
+        leaderboard.setTranslateY(400);
+
         Button quitButton = new Button("Quit game");
         quitButton.setOnAction(e -> fireExit());
         quitButton.setTranslateX((double) (FXGL.getAppWidth() - this.buttonWidth) / 2);
-        quitButton.setTranslateY(400);
+        quitButton.setTranslateY(500);
 
         this.styleButton(startButton);
+        this.styleButton(leaderboard);
         this.styleButton(quitButton);
 
-        getContentRoot().getChildren().addAll(backgroundView, logoView, startButton, quitButton);
+        getContentRoot().getChildren().addAll(backgroundView, logoView, startButton, leaderboard, quitButton);
     }
 
     private void styleButton(Button button) {

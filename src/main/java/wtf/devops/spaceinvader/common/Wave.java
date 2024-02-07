@@ -11,7 +11,6 @@ import javafx.util.Duration;
 
 import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 

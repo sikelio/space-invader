@@ -2,8 +2,6 @@ package wtf.devops.spaceinvader.common;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.entity.Entity;
 
 public class Enemy extends GameApplication {
     private String  lifepoint;

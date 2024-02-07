@@ -15,7 +15,6 @@ import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.texture.Texture;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import wtf.devops.spaceinvader.common.EnemyType;
 import wtf.devops.spaceinvader.components.*;
 

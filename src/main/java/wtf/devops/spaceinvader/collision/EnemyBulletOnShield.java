@@ -7,7 +7,6 @@ import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.physics.CollisionHandler;
 import wtf.devops.spaceinvader.common.EntityType;
 import wtf.devops.spaceinvader.common.ShieldState;
-import wtf.devops.spaceinvader.components.OwnerComponent;
 import wtf.devops.spaceinvader.components.ShieldComponent;
 
 public class EnemyBulletOnShield extends CollisionHandler {

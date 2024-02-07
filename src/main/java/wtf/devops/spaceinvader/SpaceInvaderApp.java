@@ -7,7 +7,6 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.Input;
-import com.almasb.fxgl.minigames.MiniGameService;
 import com.almasb.fxgl.net.Client;
 import com.almasb.fxgl.net.Connection;
 import com.almasb.fxgl.multiplayer.MultiplayerService;
@@ -31,18 +30,11 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
 import org.bson.Document;
-import org.bson.types.ObjectId;
-import org.bson.conversions.Bson;
-
-import static com.mongodb.client.model.Filters.eq;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.Projections;
 import com.mongodb.client.MongoDatabase;
-
-
 
 import java.util.HashSet;
 import java.util.Map;
@@ -78,16 +70,14 @@ public class SpaceInvaderApp extends GameApplication {
 
     @Override
     protected void initGame() {
-        String uri = "mongodb+srv://rootdev:dev123@space-invaader.g6smgyu.mongodb.net/?retryWrites=true&w=majority";
+        String uri = "mongodb://localhost:27017";
 
         try (MongoClient mongoClient = MongoClients.create(uri)) {
             MongoDatabase database = mongoClient.getDatabase("space-invader");
             database.runCommand(new Document("ping", 1));
-        }catch(MongoException e){
+        } catch(MongoException e) {
             e.printStackTrace();
         }
-
-
 
         runOnce(() -> {
             getDialogService().showConfirmationBox("Est tu le serveur ?", yes -> {
